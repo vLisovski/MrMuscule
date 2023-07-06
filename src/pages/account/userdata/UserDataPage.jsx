@@ -1,8 +1,6 @@
 import React from 'react';
-import Header from "../../../components/header/Header";
-import AccountPagesMenu from "../../../components/account/accountpagesmenu/AccountPagesMenu";
 import PersonalInformationField from "../../../components/account/personalinformation/PersonalInformationField";
-import {Col, Row} from "antd";
+import {Col} from "antd";
 
 const UserDataPage = () => {
     let user = {
@@ -12,16 +10,9 @@ const UserDataPage = () => {
     }
     return (
         <>
-            <Header/>
-            <Row justify="start">
-                <Col span={4}>
-                    <AccountPagesMenu/>
-                </Col>
-                <Col style={{display: "flex", flexDirection: "row", flexWrap: "wrap"}} span={20}>
-                    <PersonalInformationField user={user}/>
-                </Col>
-            </Row>
-
+            <Col style={{display: "flex", flexDirection: "row", flexWrap: "wrap"}} span={20}>
+                <PersonalInformationField user={user}/>
+            </Col>
         </>
     );
 };

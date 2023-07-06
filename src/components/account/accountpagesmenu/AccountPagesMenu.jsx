@@ -7,37 +7,38 @@ import {
     WalletOutlined
 } from "@ant-design/icons";
 import {Menu} from "antd";
+import {NavLink} from "react-router-dom";
 
 const AccountPagesMenu = () => {
     const items = [
         {
             icon: <IdcardOutlined/>,
-            label: 'Личная информация',
-            key: 'personal_information',
+            label: <NavLink to="/account/info">Личная информация</NavLink>,
+            key: 'info',
         },
         {
             icon: <ShoppingOutlined/>,
-            label: 'Мои покупки',
-            key: 'my_purchases',
+            label: <NavLink to="/account/purchases">Мои покупки</NavLink>,
+            key: 'purchases',
         },
         {
             icon: <RestOutlined/>,
-            label: 'Мои возвраты',
-            key: 'my_returns',
+            label:<NavLink to="/account/returns">Мои возвраты</NavLink>,
+            key: 'returns',
         },
         {
             icon: <WalletOutlined/>,
-            label: 'Мои бонусы',
-            key: 'my_bonuses',
+            label:<NavLink to="/account/bonuses">Мои бонусы</NavLink>,
+            key: 'bonuses',
         },
         {
             icon: <HeartOutlined/>,
-            label: 'Избранное',
+            label:<NavLink to="/account/favorite">Избранное</NavLink>,
             key: 'favorite',
         }
     ];
 
-    const [current, setCurrent] = useState('personal_information');
+    const [current, setCurrent] = useState('info');
     const onClick = (e) => {
         setCurrent(e.key);
     };

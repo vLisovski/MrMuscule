@@ -5,17 +5,18 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {DevSupport} from "@react-buddy/ide-toolbox";
 import {ComponentPreviews, useInitial} from "./dev";
+import {BrowserRouter} from "react-router-dom";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <React.StrictMode>
-        <DevSupport
-            ComponentPreviews={ComponentPreviews}
-            useInitialHook={useInitial}
-        >
+    <DevSupport
+        ComponentPreviews={ComponentPreviews}
+        useInitialHook={useInitial}
+    >
+        <BrowserRouter>
             <App/>
-        </DevSupport>
-    </React.StrictMode>
+        </BrowserRouter>
+    </DevSupport>
 );
 
 // If you want to shop measuring performance in your app, pass a function

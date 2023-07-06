@@ -1,9 +1,8 @@
 import React from 'react';
-
 import Footer from "../../components/footer/Footer";
 import {Space} from "antd";
 
-const InventoryPage = () => {
+const ClothesPage = () => {
     return (
         <>
             <Space style={{
@@ -13,11 +12,11 @@ const InventoryPage = () => {
                 alignItems: "center",
                 marginTop: "30px"
             }}>
-                <p>Инвентарь</p>
+                <p>Одежда</p>
             </Space>
             <Footer/>
         </>
     );
 };
 
-export default InventoryPage;
+export default ClothesPage;

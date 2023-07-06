@@ -1,8 +1,5 @@
 import React from 'react';
-import Header from "../../../components/header/Header";
-import {Col, Row} from "antd";
-import AccountPagesMenu from "../../../components/account/accountpagesmenu/AccountPagesMenu";
-import Footer from "../../../components/footer/Footer";
+import {Col} from "antd";
 import Returns from "../../../components/account/returns/Returns";
 
 const ReturnsPage = () => {
@@ -20,21 +17,11 @@ const ReturnsPage = () => {
         description: "Описание"
     }]
     return (
-        <>
-            <Header/>
-            <Row justify="start">
-                <Col span={4}
-                >
-                    <AccountPagesMenu/>
-                </Col>
-                <Col style={{display: "flex", flexDirection: "row", flexWrap: "wrap"}}
-                     span={20}
-                >
-                    <Returns returns={returns}/>
-                </Col>
-            </Row>
-            <Footer/>
-        </>
+        <Col style={{display: "flex", flexDirection: "row", flexWrap: "wrap"}}
+             span={20}
+        >
+            <Returns returns={returns}/>
+        </Col>
     );
 };
 

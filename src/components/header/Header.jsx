@@ -2,26 +2,25 @@ import React from 'react';
 import {Menu} from 'antd';
 import {useState} from 'react';
 import {HomeOutlined, ShoppingCartOutlined, UserOutlined} from "@ant-design/icons";
-
+import {NavLink} from "react-router-dom"
 const items = [
     {
         icon: <HomeOutlined/>,
         label: <strong>MUSCULE.RU</strong>,
-        key: 'start',
+        key: ''
     },
     {
-        label: 'Инвентарь',
+        label: <NavLink to="/inventory">Инвентарь</NavLink>,
         key: 'inventory',
 
     },
     {
-        label: 'Одежда',
+        label: <NavLink to="/clothes">Одежда</NavLink>,
         key: 'clothes',
-        disabled: true,
     },
     {
-        label: 'Питание',
-        key: 'feed',
+        label: <NavLink to="/food">Питание</NavLink>,
+        key: 'food',
         children: [
             {
                 type: 'group',
@@ -54,22 +53,23 @@ const items = [
         ],
     },
     {
-        icon: <UserOutlined />,
-        key: 'user',
+        icon:<NavLink to="/account/info"><UserOutlined /></NavLink>,
+        key: 'account',
         style: { float: 'right' },
     },
     {
-        icon: <ShoppingCartOutlined/>,
-        key: 'shoppingCart',
+        icon:<NavLink to="/cart"><ShoppingCartOutlined/></NavLink>,
+        key: 'cart',
         style: { float: 'right' },
     },
 ];
 const Header = () => {
-    const [current, setCurrent] = useState('start');
+    const [current, setCurrent] = useState('inventory');
+
     const onClick = (e) => {
-        console.log('click ', e);
         setCurrent(e.key);
     };
+
     return (
         <Menu style={{ display: 'block',fontSize:"medium", height: '50px' }}
               onClick={onClick}

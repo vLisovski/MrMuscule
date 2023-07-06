@@ -1,8 +1,5 @@
 import React from 'react';
-import Header from "../../../components/header/Header";
-import {Col, Row} from "antd";
-import AccountPagesMenu from "../../../components/account/accountpagesmenu/AccountPagesMenu";
-import Footer from "../../../components/footer/Footer";
+import {Col} from "antd";
 import Favorite from "../../../components/account/favorite/Favorite";
 
 const FavoritePage = () => {
@@ -20,21 +17,11 @@ const FavoritePage = () => {
         description: "Описание"
     }]
     return (
-        <>
-            <Header/>
-            <Row justify="start">
-                <Col span={4}
-                >
-                    <AccountPagesMenu/>
-                </Col>
-                <Col style={{display: "flex", flexDirection: "row", flexWrap: "wrap"}}
-                     span={20}
-                >
-                    <Favorite favorite={favorite}/>
-                </Col>
-            </Row>
-            <Footer/>
-        </>
+        <Col style={{display: "flex", flexDirection: "row", flexWrap: "wrap"}}
+             span={20}
+        >
+            <Favorite favorite={favorite}/>
+        </Col>
     );
 };
 
