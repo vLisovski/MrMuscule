@@ -16,4 +16,10 @@ class AuthOrRegister{
     async registration(credentials){
         return await this.#axios.post("/register",credentials);
     }
+
+    async checkEmail(email){
+        return await this.#axios.get(`/checkEmail?email=${email}`);
+    }
 }
+
+export default AuthOrRegister

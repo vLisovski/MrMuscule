@@ -1,16 +1,30 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Col, Row} from "antd";
 import AccountPagesMenu from "../../components/account/accountpagesmenu/AccountPagesMenu";
-import {Routes, Route} from "react-router-dom";
+import {Routes, Route, useNavigate} from "react-router-dom";
 import UserDataPage from "./userdata/UserDataPage";
 import FavoritePage from "./favorite/FavoritePage";
 import PurchasesPage from "./purchases/PurchasesPage";
 import ReturnsPage from "./returns/ReturnsPage";
 import BonusesPage from "./bonuses/BonusesPage";
-import AuthPage from "../authpage/AuthPage";
+import LocalStorageWorker from "../../storage/LocalStorageWorker";
 
 const AccountPage = () => {
     let [isAuth, setAuth] = useState(false)
+    let localStorageWorker = new LocalStorageWorker();
+    let navigate = useNavigate();
+    useEffect(() => {
+        let token = localStorageWorker.get("token");
+        let userid = localStorageWorker.get("userid");
+
+        if (token != null && userid != null) {
+            setAuth(true);
+        } else {
+            setAuth(false);
+            navigate("/authorization")
+        }
+    }, []);
+
     return (
         <>
             {
@@ -28,8 +42,8 @@ const AccountPage = () => {
                             <Route path="/bonuses" element={<BonusesPage/>}/>
                         </Routes>
                     </Row>
-                    :
-                    <AuthPage/>
+                    :<p/>
+
             }
         </>
     );

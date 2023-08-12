@@ -1,5 +1,5 @@
 import './App.css';
-import {Route, Routes} from "react-router-dom";
+import {Redirect, Route, Routes} from "react-router-dom";
 import RegistrationPage from "./pages/registration/RegistrationPage";
 import AuthPage from "./pages/authpage/AuthPage";
 import Header from "./components/header/Header";
@@ -8,6 +8,7 @@ import ClothesPage from "./pages/shop/ClothesPage";
 import FoodPage from "./pages/shop/FoodPage";
 import CartWindow from "./pages/cart/CartWindow";
 import AccountPage from "./pages/account/AccountPage";
+import RedirectPage from "./pages/shop/RedirectPage";
 //TODO пагинация на страницах
 //TODO удаление товаров из избранного
 function App() {
@@ -15,6 +16,7 @@ function App() {
       <>
           <Header/>
           <Routes>
+              <Route path="/" element={<RedirectPage/>}/>
               <Route path="/inventory" element={<InventoryPage/>}/>
               <Route path="/clothes" element={<ClothesPage/>}/>
               <Route path="/food" element={<FoodPage/>}/>
@@ -22,7 +24,6 @@ function App() {
               <Route path="/account/*" element={<AccountPage/>}/>
               <Route path="/registration" element={<RegistrationPage/>}/>
               <Route path="/authorization" element={<AuthPage/>}/>
-
           </Routes>
       </>
 
