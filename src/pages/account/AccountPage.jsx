@@ -10,26 +10,26 @@ import BonusesPage from "./bonuses/BonusesPage";
 import AuthPage from "../authpage/AuthPage";
 
 const AccountPage = () => {
-    let [isAuth, setAuth] = useState(true)
+    let [isAuth, setAuth] = useState(false)
     return (
         <>
             {
                 isAuth
                     ?
-                <Row justify="start">
-                    <Col span={4}>
-                        <AccountPagesMenu/>
-                    </Col>
-                    <Routes>
-                        <Route path="/info" element={<UserDataPage/>}/>
-                        <Route path="/favorite" element={<FavoritePage/>}/>
-                        <Route path="/purchases" element={<PurchasesPage/>}/>
-                        <Route path="/returns" element={<ReturnsPage/>}/>
-                        <Route path="/bonuses" element={<BonusesPage/>}/>
-                    </Routes>
-                </Row>
+                    <Row justify="start">
+                        <Col span={4}>
+                            <AccountPagesMenu/>
+                        </Col>
+                        <Routes>
+                            <Route path="/info" element={<UserDataPage/>}/>
+                            <Route path="/favorite" element={<FavoritePage/>}/>
+                            <Route path="/purchases" element={<PurchasesPage/>}/>
+                            <Route path="/returns" element={<ReturnsPage/>}/>
+                            <Route path="/bonuses" element={<BonusesPage/>}/>
+                        </Routes>
+                    </Row>
                     :
-                <AuthPage/>
+                    <AuthPage/>
             }
         </>
     );

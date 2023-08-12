@@ -7,7 +7,7 @@ const items = [
     {
         icon: <HomeOutlined/>,
         label: <strong>MUSCULE.RU</strong>,
-        key: ''
+        key: 'main'
     },
     {
         label: <NavLink to="/inventory">Инвентарь</NavLink>,
@@ -19,38 +19,9 @@ const items = [
         key: 'clothes',
     },
     {
-        label: <NavLink to="/food">Питание</NavLink>,
+        label: <NavLink to="/food">Добавки</NavLink>,
         key: 'food',
-        children: [
-            {
-                type: 'group',
-                label: 'Protein',
-                children: [
-                    {
-                        label: 'Muscule',
-                        key: 'muscule',
-                    },
-                    {
-                        label: 'Wild Food',
-                        key: 'wildfood',
-                    },
-                ],
-            },
-            {
-                type: 'group',
-                label: 'Vitamines',
-                children: [
-                    {
-                        label: 'B2',
-                        key: 'b2',
-                    },
-                    {
-                        label: 'B3',
-                        key: 'b3',
-                    },
-                ],
-            },
-        ],
+        disabled: false
     },
     {
         icon:<NavLink to="/account/info"><UserOutlined /></NavLink>,

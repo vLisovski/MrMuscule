@@ -22,11 +22,6 @@ const AccountPagesMenu = () => {
             key: 'purchases',
         },
         {
-            icon: <RestOutlined/>,
-            label:<NavLink to="/account/returns">Мои возвраты</NavLink>,
-            key: 'returns',
-        },
-        {
             icon: <WalletOutlined/>,
             label:<NavLink to="/account/bonuses">Мои бонусы</NavLink>,
             key: 'bonuses',

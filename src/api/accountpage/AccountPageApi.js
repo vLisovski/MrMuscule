@@ -1,20 +1,12 @@
-export const getFavorite = () => {
 
-}
 
-export const getReturns = () => {
 
-}
 
-export const getPurchases = () => {
 
-}
+class AccountPageApi{
 
-export const getBonusBalance = () => {
+    #axios
 
-}
-
-export const getUser = () => {
 
 }
 

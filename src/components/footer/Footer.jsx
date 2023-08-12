@@ -1,13 +1,13 @@
 import React from 'react';
-import {Divider} from "antd";
+import {Divider, Space} from "antd";
 
 const Footer = () => {
     return (
         <>
             <Divider />
-            <div>
+            <Space style={{maxHeight: "100px",minHeight: "100px"}}>
                 Footer
-            </div>
+            </Space>
         </>
     );
 };
