@@ -93,7 +93,7 @@ const AuthPage = () => {
                     <Form.Item
                         label="Почта"
                         name="email"
-                        style={{marginBottom: "0px"}}
+                        style={{marginBottom: "2px"}}
                         rules={[{
                             required: true,
                             message: 'Введите email'
@@ -115,7 +115,7 @@ const AuthPage = () => {
                     <Form.Item
                         label="Пароль"
                         name="password"
-                        style={{marginBottom: "0px"}}
+                        style={{marginBottom: "2px"}}
                         rules={[{
                             required: true,
                             message: "Введите пароль"

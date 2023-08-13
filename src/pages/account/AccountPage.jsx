@@ -19,6 +19,7 @@ const AccountPage = () => {
 
         if (token != null && userid != null) {
             setAuth(true);
+            localStorageWorker.save("menu","account")
         } else {
             setAuth(false);
             navigate("/authorization")
@@ -43,7 +44,6 @@ const AccountPage = () => {
                         </Routes>
                     </Row>
                     :<p/>
-
             }
         </>
     );

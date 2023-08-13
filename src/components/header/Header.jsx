@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Menu, Space} from 'antd';
 import {useState} from 'react';
 import {HomeOutlined, ShoppingCartOutlined, UserOutlined} from "@ant-design/icons";
-import {NavLink} from "react-router-dom"
+import {NavLink, useNavigate} from "react-router-dom"
+import LocalStorageWorker from "../../storage/LocalStorageWorker";
 const items = [
     {
         icon: <HomeOutlined/>,
@@ -35,11 +36,17 @@ const items = [
     },
 ];
 const Header = () => {
-    const [current, setCurrent] = useState('inventory');
-
+    let navigate = useNavigate();
+    console.log(navigate);
+    const localStorageWorker = new LocalStorageWorker();
+    const [current, setCurrent] = useState(localStorageWorker.get("menu"));
+    // const[currentPlace,setCurrentPlace] = useState(navigate.options.currentLocation);
     const onClick = (e) => {
-        setCurrent(e.key);
+        localStorageWorker.save("menu",e.key)
+        setCurrent(localStorageWorker.get("menu"))
     };
+
+    useEffect(()=>{setCurrent(localStorageWorker.get("menu"))},[window.location.href]);
 
     return (
         <Menu style={{ display: 'block',
@@ -48,7 +55,7 @@ const Header = () => {
             backgroundColor: "white",
             boxShadow: "0px 0px 40px 0px rgba(0, 0, 0, 0.2)"}}
               onClick={onClick}
-              selectedKeys={[current]}
+              selectedKeys={current}
               theme="light"
               mode="horizontal"
               items={items}/>
