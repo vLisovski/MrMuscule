@@ -35,7 +35,6 @@ const AuthPage = () => {
                     response => {
                         let userid = response.data;
                         localStorageWorker.save("userid", userid);
-                        console.log(localStorageWorker.get(userid))
                         navigate("/account/info");
                     }
                 ).catch(
