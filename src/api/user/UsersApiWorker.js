@@ -1,6 +1,6 @@
 import axios from "axios";
 
-class UsersApiWorker{
+class UsersApiWorker {
     #axios;
 
     constructor() {
@@ -16,5 +16,22 @@ class UsersApiWorker{
             }
         });
     }
+
+    async getFavorites(userId, limit, offset) {
+        return await this.#axios.get(`/getFavorites?userId=${userId}&limit=${limit}&offset=${offset}`)
+    }
+
+    async addFavorite(insertedItem) {
+        return await this.#axios.post("/addFavorite", insertedItem)
+    }
+
+    async deleteFavorite(deletedItem) {
+        return await this.#axios.delete("/deleteFavorite", deletedItem)
+    }
+
+    async getPurchases(userId, limit, offset) {
+        return await this.#axios.get(`/getPurchases?userId=${userId}&limit=${limit}&offset=${offset}`)
+    }
 }
-export default UsersApiWorker;
+
+export default UsersApiWorker
