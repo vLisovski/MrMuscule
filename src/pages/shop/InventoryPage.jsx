@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 
 import Footer from "../../components/footer/Footer";
-import {Dropdown, Pagination, Space} from "antd";
+import {Col, Dropdown, Pagination, Space} from "antd";
 import ShopPageApi from "../../api/shop/ShopPageApi";
 import {DownOutlined} from "@ant-design/icons";
 import Inventory from "../../components/shop/Inventory";
@@ -53,12 +53,18 @@ const InventoryPage = () => {
         <>
             <Space style={{
                 display: "flex",
-                flexDirection: "row",
-                alignContent: "center",
-                alignItems: "center",
+                flexDirection: "column",
+                alignContent: "start",
+                alignItems: "stretch",
                 marginTop: "30px"
             }}>
-                <div>
+                <Space style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignContent: "start",
+                    alignItems: "stretch",
+                    marginLeft: "5%"
+                    }}>
                     <Dropdown
                         menu={{
                             items,
@@ -72,12 +78,24 @@ const InventoryPage = () => {
                             </Space>
                         </a>
                     </Dropdown>
+
+                </Space>
+                <Col style={{display: "flex", flexDirection: "row", flexWrap: "wrap" , marginLeft: "10%"}}
+                     span={20}>
+                    <Inventory cards={cards}/>
+                </Col>
+                <Space style={{
+                    display: "block",
+                    alignContent: "center",
+                    alignItems: "stretch",
+                    alignSelf: "center",
+                    marginLeft: "47%",
+                    marginTop: "30px"}}>
                     <Pagination onChange={onChange}
                                 defaultCurrent={1}
                                 total={limit}
                                 current={currentPage}/>
-                </div>
-                <Inventory cards={cards}/>
+                </Space>
             </Space>
             <Footer/>
         </>

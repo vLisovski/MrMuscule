@@ -10,7 +10,7 @@ const Favorite = (props) => {
             style={{background: 'white', marginTop: '30px' , marginLeft: '8px'}}
             size={"small"}
             bordered={true}
-            cover={<Image alt="purchase" width={250} src={item.imgSrc}/>}
+            cover={<Image alt="purchase" width={250} src={item.photo_path}/>}
             hoverable={false}>
             <Meta
                 title={item.title}
