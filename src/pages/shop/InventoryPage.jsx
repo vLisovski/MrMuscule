@@ -1,21 +1,30 @@
 import React, {useEffect, useState} from 'react';
 
-import Footer from "../../components/footer/Footer";
 import {Col, Dropdown, Pagination, Space} from "antd";
 import ShopPageApi from "../../api/shop/ShopPageApi";
 import {DownOutlined} from "@ant-design/icons";
-import Inventory from "../../components/shop/Inventory";
+import ShopItems from "../../components/shop/ShopItems";
+import Footer from "../../components/footer/Footer";
 
 const InventoryPage = () => {
 
     let shopPageApi = new ShopPageApi()
 
     let [cards, setCards] = useState([])
-    let [limit, setLimit] = useState(6)
+    let [limit, setLimit] = useState(3)
     let [offset, setOffset] = useState(0)
     let [currentPage, setCurrentPage] = useState(1)
+    let [total, setTotal] = useState(0)
 
-    useEffect(() => {
+    useEffect(()=>{
+        shopPageApi.getTotalInventory().then(response => {
+            setTotal(response.data)
+            console.log(total)
+        }).catch(
+            error => {
+                alert(error)
+            }
+        )
         shopPageApi.getAllInventory(limit, offset).then(response => {
             setCards(response.data)
         }).catch(
@@ -23,7 +32,7 @@ const InventoryPage = () => {
                 alert(error)
             }
         )
-    }, [limit, offset])
+    },[limit, offset])
 
     const items = [
         {
@@ -44,9 +53,9 @@ const InventoryPage = () => {
         setLimit(key)
     };
 
-    const onChange = ({page, pageSize}) => {
+    const onChange = (page) => {
         setCurrentPage(page)
-        setOffset(limit*currentPage)
+        setOffset(limit*(page-1))
     }
 
     return (
@@ -80,22 +89,22 @@ const InventoryPage = () => {
                     </Dropdown>
 
                 </Space>
-                <Col style={{display: "flex", flexDirection: "row", flexWrap: "wrap" , marginLeft: "10%"}}
+                <Col style={{display: "flex", flexDirection: "row",justifyContent: "start", flexWrap: "wrap" , marginLeft: "10%"}}
                      span={20}>
-                    <Inventory cards={cards}/>
+                    <ShopItems cards={cards}/>
                 </Col>
-                <Space style={{
-                    display: "block",
-                    alignContent: "center",
-                    alignItems: "stretch",
-                    alignSelf: "center",
-                    marginLeft: "47%",
-                    marginTop: "30px"}}>
-                    <Pagination onChange={onChange}
-                                defaultCurrent={1}
-                                total={limit}
-                                current={currentPage}/>
-                </Space>
+            </Space>
+            <Space style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                marginTop: "30px"}}>
+                <Pagination onChange={onChange}
+                            defaultCurrent={1}
+                            defaultPageSize={1}
+                            total={total}
+                            pageSize={limit}
+                            current={currentPage}/>
             </Space>
             <Footer/>
         </>

@@ -20,6 +20,18 @@ class ShopPageApi {
     async getAllClothes(limit, offset) {
         return await this.#axios.get(`/getAll/clothes?limit=${limit}&offset=${offset}`);
     }
+
+    async getTotalInventory(){
+        return await this.#axios.get("/getTotal/inventory");
+    }
+
+    async getTotalFood(){
+        return await this.#axios.get("/getTotal/food");
+    }
+
+    async getTotalClothes(){
+        return await this.#axios.get("/getTotal/clothes");
+    }
 }
 
 export default ShopPageApi

@@ -8,6 +8,7 @@ const NoFoundPage = () => {
             flexDirection:"row",
             alignContent:"center",
             alignItems:"center",
+            justifyContent: "center",
             marginTop: "30px"}}>
             <Divider/>
             <strong>PAGE NOT FOUND</strong>

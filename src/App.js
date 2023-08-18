@@ -9,6 +9,7 @@ import FoodPage from "./pages/shop/FoodPage";
 import CartWindow from "./pages/cart/CartWindow";
 import AccountPage from "./pages/account/AccountPage";
 import RedirectPage from "./pages/shop/RedirectPage";
+import Footer from "./components/footer/Footer";
 //TODO пагинация на страницах
 //TODO удаление товаров из избранного
 function App() {
