@@ -5,21 +5,41 @@ import ShopPageApi from "../../api/shop/ShopPageApi";
 import {DownOutlined} from "@ant-design/icons";
 import ShopItems from "../../components/shop/ShopItems";
 import Footer from "../../components/footer/Footer";
+import LocalStorageWorker from "../../storage/LocalStorageWorker";
+import CartApi from "../../api/cart/CartApi";
+import UsersApiWorker from "../../api/user/UsersApiWorker";
 
 const InventoryPage = () => {
 
+    let cartApi = new CartApi()
+    let userApi = new UsersApiWorker()
     let shopPageApi = new ShopPageApi()
-
+    let localStorageWorker = new LocalStorageWorker();
     let [cards, setCards] = useState([])
     let [limit, setLimit] = useState(3)
     let [offset, setOffset] = useState(0)
     let [currentPage, setCurrentPage] = useState(1)
     let [total, setTotal] = useState(0)
+    let [cart, setCart] = useState([])
+    let [favorite, setFavorite] = useState([])
+    let [authorized, setAuthorized] = useState(false)
 
-    useEffect(()=>{
+    useEffect(() => {
+        if (localStorageWorker.get("token") !== null && localStorageWorker.get("userid") !== null) {
+            setAuthorized(true)
+        }
+        if (localStorageWorker.get("token") != null && localStorageWorker.get("userid") != null) {
+            userApi.getFavorites(localStorageWorker.get("userid"), total, 0, localStorageWorker.get("token"))
+                .then(response => {
+                setFavorite(response.data)
+            }).catch(
+                () => {
+                    setFavorite([])
+                }
+            )
+        }
         shopPageApi.getTotalInventory().then(response => {
             setTotal(response.data)
-            console.log(total)
         }).catch(
             error => {
                 alert(error)
@@ -32,7 +52,19 @@ const InventoryPage = () => {
                 alert(error)
             }
         )
-    },[limit, offset])
+    }, [limit, offset])
+
+    useEffect(() => {
+        localStorageWorker.save("cart", cart)
+        console.log("CART"+cart)
+        if (authorized && cart.length !== 0) {
+            cartApi.addProduct(cart.slice(-1), localStorageWorker.get("token"))
+        }
+    }, [cart])
+
+    useEffect(() => {
+        console.log("FAVORITE " + favorite)
+    }, [favorite])
 
     const items = [
         {
@@ -55,7 +87,7 @@ const InventoryPage = () => {
 
     const onChange = (page) => {
         setCurrentPage(page)
-        setOffset(limit*(page-1))
+        setOffset(limit * (page - 1))
     }
 
     return (
@@ -73,7 +105,7 @@ const InventoryPage = () => {
                     alignContent: "start",
                     alignItems: "stretch",
                     marginLeft: "5%"
-                    }}>
+                }}>
                     <Dropdown
                         menu={{
                             items,
@@ -89,16 +121,27 @@ const InventoryPage = () => {
                     </Dropdown>
 
                 </Space>
-                <Col style={{display: "flex", flexDirection: "row",justifyContent: "start", flexWrap: "wrap" , marginLeft: "10%"}}
+                <Col style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "start",
+                    flexWrap: "wrap",
+                    marginLeft: "10%"
+                }}
                      span={20}>
-                    <ShopItems cards={cards}/>
+                    <ShopItems cart={cart}
+                               favorite={favorite}
+                               setCart={setCart}
+                               setFavorite={setFavorite}
+                               cards={cards}/>
                 </Col>
             </Space>
             <Space style={{
                 display: "flex",
                 flexDirection: "row",
                 justifyContent: "center",
-                marginTop: "30px"}}>
+                marginTop: "30px"
+            }}>
                 <Pagination onChange={onChange}
                             defaultCurrent={1}
                             defaultPageSize={1}
