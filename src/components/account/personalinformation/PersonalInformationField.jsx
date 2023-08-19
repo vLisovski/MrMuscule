@@ -16,8 +16,11 @@ const PersonalInformationField = (props) => {
         <Space direction="vertical"
                size="large"
                style={{display: 'flex',
-                   flexDirection: 'row',
+                   flexDirection: 'column',
+                   justifyContent: "space-around",
+                   alignItems: "center",
                    marginTop: '30px',
+                   marginLeft: '8px',
                    background: 'white',
                    border: true,
                    borderRadius: '10px'}}>
@@ -33,7 +36,7 @@ const PersonalInformationField = (props) => {
                 align={"baseline"}
                 user={user}
                 style={{display: 'block', margin: '10px', flexDirection: "column", alignItems: "start"}}/>
-            <Button type="primary" onClick={()=>{
+            <Button style={{marginLeft: "8px", marginBottom: "8px"}} type="primary" onClick={()=>{
                 localStorageWorker.delete("userid");
                 localStorageWorker.delete("token");
                 localStorageWorker.save("menu","inventory");

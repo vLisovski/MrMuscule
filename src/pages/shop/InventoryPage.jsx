@@ -22,29 +22,26 @@ const InventoryPage = () => {
     let [total, setTotal] = useState(0)
     let [cart, setCart] = useState([])
     let [favorite, setFavorite] = useState([])
-    let [authorized, setAuthorized] = useState(false)
 
     useEffect(() => {
-        if (localStorageWorker.get("token") !== null && localStorageWorker.get("userid") !== null) {
-            setAuthorized(true)
-        }
-        if (localStorageWorker.get("token") != null && localStorageWorker.get("userid") != null) {
-            userApi.getFavorites(localStorageWorker.get("userid"), total, 0, localStorageWorker.get("token"))
-                .then(response => {
-                setFavorite(response.data)
-            }).catch(
-                () => {
-                    setFavorite([])
-                }
-            )
-        }
         shopPageApi.getTotalInventory().then(response => {
             setTotal(response.data)
+            if (localStorageWorker.get("token") != null && localStorageWorker.get("userid") != null) {
+                userApi.getFavoritesIds(localStorageWorker.get("userid"), response.data, 0, localStorageWorker.get("token"))
+                    .then(response => {
+                        setFavorite(response.data)
+                    }).catch(
+                    () => {
+                        setFavorite([])
+                    }
+                )
+            }
         }).catch(
             error => {
                 alert(error)
             }
         )
+
         shopPageApi.getAllInventory(limit, offset).then(response => {
             setCards(response.data)
         }).catch(
@@ -56,10 +53,7 @@ const InventoryPage = () => {
 
     useEffect(() => {
         localStorageWorker.save("cart", cart)
-        console.log("CART"+cart)
-        if (authorized && cart.length !== 0) {
-            cartApi.addProduct(cart.slice(-1), localStorageWorker.get("token"))
-        }
+        console.log("CART" + cart)
     }, [cart])
 
     useEffect(() => {

@@ -17,6 +17,14 @@ class UsersApiWorker {
         });
     }
 
+    async getFavoritesIds(userId, limit, offset, token) {
+        return await this.#axios.get(`/getFavoritesIds?userId=${userId}&limit=${limit}&offset=${offset}`, {
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        })
+    }
+
     async getFavorites(userId, limit, offset, token) {
         return await this.#axios.get(`/getFavorites?userId=${userId}&limit=${limit}&offset=${offset}`, {
             headers: {
@@ -25,8 +33,18 @@ class UsersApiWorker {
         })
     }
 
+
+
     async addFavorite(insertedItem, token) {
-        return await this.#axios.post("/addFavorite", insertedItem, {
+        await this.#axios.post("/addFavorite", insertedItem, {
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        })
+    }
+
+    async getTotalFavorites(userId, token){
+        await this.#axios.get(`/getTotalFavorite?userId=${userId}`,{
             headers: {
                 "Authorization": "Bearer " + token
             }
@@ -34,10 +52,11 @@ class UsersApiWorker {
     }
 
     async deleteFavorite(deletedItem, token) {
-        return await this.#axios.delete("/deleteFavorite", deletedItem, {
+        await this.#axios.delete("/deleteFavorite", {
             headers: {
                 "Authorization": "Bearer " + token
-            }
+            },
+            data: deletedItem
         })
     }
 

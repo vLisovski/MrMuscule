@@ -2,6 +2,7 @@ import {Card, Image} from "antd";
 import Meta from "antd/es/card/Meta";
 import {ShoppingCartOutlined, StarOutlined} from "@ant-design/icons";
 import LocalStorageWorker from "../../storage/LocalStorageWorker";
+import UsersApiWorker from "../../api/user/UsersApiWorker";
 
 const ShopItems = (props) => {
 
@@ -64,14 +65,26 @@ function addToCart(props, id) {
 }
 
 function addToFavorite(props, id) {
-    props.setFavorite([...props.favorite, id])
+
+    let userApi = new UsersApiWorker()
+    let local = new LocalStorageWorker()
+    userApi.addFavorite({
+        userId: local.get("userid"),
+        productId: id
+    },local.get("token")).then(() => props.setFavorite([...props.favorite, id])).catch(error => {console.log(error)})
 }
 
 function deleteFromFavorite(props, id){
 
-    let favorites = props.favorite.filter((item) =>  {return item !== id} )
-
-    props.setFavorite(favorites)
+    let userApi = new UsersApiWorker()
+    let local = new LocalStorageWorker()
+    userApi.deleteFavorite({
+        userId: local.get("userid"),
+        productId: id
+    },local.get("token")).then(() => {
+        let favorites = props.favorite.filter((item) =>  {return item !== id} )
+        props.setFavorite(favorites)
+    }).catch(error => {console.log(error)})
 
 }
 
