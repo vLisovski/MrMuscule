@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 
-import {Col, Dropdown, Pagination, Space} from "antd";
+import {Alert, Col, Dropdown, Pagination, Skeleton, Space, Spin} from "antd";
 import ShopPageApi from "../../api/shop/ShopPageApi";
 import {DownOutlined} from "@ant-design/icons";
 import ShopItems from "../../components/shop/ShopItems";
@@ -8,6 +8,8 @@ import Footer from "../../components/footer/Footer";
 import LocalStorageWorker from "../../storage/LocalStorageWorker";
 import CartApi from "../../api/cart/CartApi";
 import UsersApiWorker from "../../api/user/UsersApiWorker";
+import Meta from "antd/es/card/Meta";
+import Card from "antd/es/card/Card";
 
 const InventoryPage = () => {
 
@@ -15,6 +17,7 @@ const InventoryPage = () => {
     let userApi = new UsersApiWorker()
     let shopPageApi = new ShopPageApi()
     let localStorageWorker = new LocalStorageWorker();
+    let [loading, setLoading] = useState(true)
     let [cards, setCards] = useState([])
     let [limit, setLimit] = useState(3)
     let [offset, setOffset] = useState(0)
@@ -30,6 +33,7 @@ const InventoryPage = () => {
                 userApi.getFavoritesIds(localStorageWorker.get("userid"), response.data, 0, localStorageWorker.get("token"))
                     .then(response => {
                         setFavorite(response.data)
+                        setLoading(false)
                     }).catch(
                     () => {
                         setFavorite([])
@@ -115,35 +119,71 @@ const InventoryPage = () => {
                     </Dropdown>
 
                 </Space>
-                <Col style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "start",
-                    flexWrap: "wrap",
-                    marginLeft: "10%"
-                }}
-                     span={20}>
-                    <ShopItems cart={cart}
-                               favorite={favorite}
-                               setCart={setCart}
-                               setFavorite={setFavorite}
-                               cards={cards}/>
-                </Col>
+                {
+                    loading
+                        ?
+                        <>
+                            <Col style={{
+                                display: "flex",
+                                flexDirection: "row",
+                                justifyContent: "start",
+                                flexWrap: "wrap",
+                                marginLeft: "10%"
+                            }}
+                                 span={24}>
+                                <Spin style={{marginLeft: '10px', marginTop: '10px'}}>
+                                    <Alert
+                                        message="Грузим инвентарь"
+                                        description="Длительность загрузки зависит от Вашей сети"
+                                        type="info"
+                                        style={{
+                                            padding: '50px',
+                                            marginTop: '50px'
+                                        }}
+                                    />
+                                </Spin>
+                            </Col>
+                            <Space style={{
+                                display: "flex",
+                                flexDirection: "row",
+                                justifyContent: "center",
+                                marginTop: "30px",
+                            }}>
+                            </Space>
+                        </>
+                        :
+                        <>
+                            <Col style={{
+                                display: "flex",
+                                flexDirection: "row",
+                                justifyContent: "start",
+                                flexWrap: "wrap",
+                                marginLeft: "10%"
+                            }}
+                                 span={20}>
+                                <ShopItems cart={cart}
+                                           favorite={favorite}
+                                           setCart={setCart}
+                                           setFavorite={setFavorite}
+                                           cards={cards}/>
+                            </Col>
+                            <Space style={{
+                                display: "flex",
+                                flexDirection: "row",
+                                justifyContent: "center",
+                                marginTop: "30px"
+                            }}>
+                                <Pagination onChange={onChange}
+                                            defaultCurrent={1}
+                                            defaultPageSize={1}
+                                            total={total}
+                                            pageSize={limit}
+                                            current={currentPage}/>
+                            </Space>
+                        </>
+                }
             </Space>
-            <Space style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "center",
-                marginTop: "30px"
-            }}>
-                <Pagination onChange={onChange}
-                            defaultCurrent={1}
-                            defaultPageSize={1}
-                            total={total}
-                            pageSize={limit}
-                            current={currentPage}/>
-            </Space>
-            <Footer/>
+            {!loading ? <Footer/> : <div/>}
         </>
     );
 };

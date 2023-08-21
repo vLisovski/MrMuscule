@@ -1,4 +1,4 @@
-import {Card, Image} from "antd";
+import {Card, Image, Skeleton} from "antd";
 import Meta from "antd/es/card/Meta";
 import {ShoppingCartOutlined, StarOutlined} from "@ant-design/icons";
 import LocalStorageWorker from "../../storage/LocalStorageWorker";
@@ -7,7 +7,7 @@ import UsersApiWorker from "../../api/user/UsersApiWorker";
 const ShopItems = (props) => {
 
     let localStorageWorker = new LocalStorageWorker();
-
+    let loading = props.loading
     return props.cards.map((item) => {
         return (<Card
             key={item.id}
@@ -23,6 +23,7 @@ const ShopItems = (props) => {
             bordered={true}
             cover={<Image alt="inventory" style={{alignSelf: "center"}} width={250} src={item.photoPath}/>}
         >
+            <Skeleton loading={loading} avatar active>
             <Meta
                 bodyStyle={{
                     display: "flex",
@@ -32,6 +33,7 @@ const ShopItems = (props) => {
                 }}
                 title={item.name}
                 description={item.description}/>
+            </Skeleton>
         </Card>)
     })
 };

@@ -6,14 +6,16 @@ const BonusBalance = (props) => {
     let balance = props.balance
     return (
         <>
-            <Space direction="vertical"
+            <Space direction="horizontal"
                 size="large"
                 style={{display: 'flex',
                 flexDirection: 'row',
                 background: 'white',
+                marginLeft: "8px",
+                marginTop: "30px",
                 border: true,
                 borderRadius: '10px'}}>
-                <Card style={{background: 'white', marginTop: '30px' , marginLeft: '8px'}}
+                <Card style={{background: 'white', marginTop: '1px' , marginLeft: '8px',marginRight: '8px'}}
                       size={"default"}
                       bordered={true}
                       hoverable={false}>
@@ -21,6 +23,7 @@ const BonusBalance = (props) => {
                           description={balance}>
                     </Meta>
                 </Card>
+
             </Space>
         </>
     );

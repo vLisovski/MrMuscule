@@ -9,7 +9,7 @@ const Avatar = (props) => {
     let size = props.size
     let align = props.align
 
-    let avatarSrc = user.avatarSrc
+    let avatarPath = user.avatarPath
     let style = props.style
 
     return (
@@ -19,7 +19,7 @@ const Avatar = (props) => {
             size={size}
             align={align}>
             <Image
-                src={avatarSrc}
+                src={avatarPath}
                 style={{
                     border: true,
                     borderRadius: '50%'

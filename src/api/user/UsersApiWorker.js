@@ -33,7 +33,45 @@ class UsersApiWorker {
         })
     }
 
+    async getUserInfo(userId, token) {
+        return await this.#axios.get(`/getById?userId=${userId}`, {
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        })
+    }
 
+    async updateEmail(userId, email, token){
+        return await this.#axios.get(`/updateEmail?userId=${userId}&email=${email}`, {
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        })
+    }
+
+    async updatePhoneNumber(userId, phoneNumber, token){
+        return await this.#axios.get(`/updatePhoneNumber?userId=${userId}&phoneNumber=${phoneNumber}`, {
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        })
+    }
+
+    async updateAvatarPath(userId, avatarPath, token){
+        return await this.#axios.get(`/updatePhotoPath?userId=${userId}&avatarPath=${avatarPath}`, {
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        })
+    }
+
+    async updateName(userId, name, token){
+        return await this.#axios.get(`/updateName?userId=${userId}&name=${name}`, {
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        })
+    }
 
     async addFavorite(insertedItem, token) {
         await this.#axios.post("/addFavorite", insertedItem, {

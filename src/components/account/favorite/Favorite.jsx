@@ -1,5 +1,5 @@
 import React from 'react';
-import {Card, Image} from "antd";
+import {Card, Image, Skeleton} from "antd";
 import Meta from "antd/es/card/Meta";
 
 const Favorite = (props) => {
@@ -12,9 +12,11 @@ const Favorite = (props) => {
             bordered={true}
             cover={<Image alt="purchase" width={250} src={item.photo_path}/>}
             hoverable={false}>
+            <Skeleton loading={props.loading} avatar active>
             <Meta
                 title={item.title}
                 description={item.description}/>
+            </Skeleton>
         </Card>)
     })
 };

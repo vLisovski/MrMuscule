@@ -1,13 +1,38 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import PersonalInformationField from "../../../components/account/personalinformation/PersonalInformationField";
 import {Col} from "antd";
+import UsersApiWorker from "../../../api/user/UsersApiWorker";
+import LocalStorageWorker from "../../../storage/LocalStorageWorker";
 
 const UserDataPage = () => {
-    let user = {
-        name: "Vladislav",
-        email: "email@mail.ru",
-        avatarSrc: "https://tipik.ru/wp-content/uploads/2023/02/%D0%9B%D1%83%D1%87%D1%88%D0%B8%D0%B5-%D0%B0%D0%BD%D0%B8%D0%BC%D0%B5-%D0%B0%D0%B2%D0%B0%D1%82%D0%B0%D1%80%D0%BA%D0%B8-%D0%B4%D0%BB%D1%8F-Discord_009.jpg"
-    }
+
+    let userApi = new UsersApiWorker()
+    let [user, setUser] = useState({
+        phoneNumber: "",
+        email: "",
+        name: "",
+        avatarPath: "",
+        bonuses: 0
+    })
+    let local = new LocalStorageWorker()
+
+    useEffect(() => {
+        if (local.get("token") !== null) {
+            userApi.getUserInfo(local.get("userid"), local.get("token"))
+                .then(response => setUser(response.data))
+                .catch(error => console.log(error))
+        } else {
+            setUser({
+                phoneNumber: "",
+                email: "",
+                name: "",
+                avatarPath: "",
+                bonuses: 0
+            })
+        }
+
+    }, [])
+
     return (
         <>
             <Col style={{display: "flex", flexDirection: "row", flexWrap: "wrap"}} span={20}>

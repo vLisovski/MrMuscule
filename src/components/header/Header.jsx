@@ -36,8 +36,6 @@ const items = [
     },
 ];
 const Header = () => {
-    let navigate = useNavigate();
-    console.log(navigate);
     const localStorageWorker = new LocalStorageWorker();
     const [current, setCurrent] = useState(localStorageWorker.get("menu"));
     // const[currentPlace,setCurrentPlace] = useState(navigate.options.currentLocation);
