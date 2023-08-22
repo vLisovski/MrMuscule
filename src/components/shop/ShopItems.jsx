@@ -42,7 +42,7 @@ function pushActions(localStorageWorker, id, props) {
 
     let actions
 
-    if (localStorageWorker.get("token") != null) {
+    if (localStorageWorker.get("token") != null && props.favorite.length>0) {
         if (props.favorite.includes(id)) {
             actions = [<ShoppingCartOutlined onClick={() => {
             }} key="cart"/>, <StarOutlined style={{color: "yellow"}} onClick={() => {

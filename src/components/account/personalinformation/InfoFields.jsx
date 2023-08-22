@@ -19,6 +19,7 @@ const InfoFields = (props) => {
     const setUpdateEmail = props.setUpdateEmail
     const setUpdatePhoneNumber = props.setUpdatePhoneNumber
     const setUpdateAvatarPath = props.setUpdateAvatarPath
+    const setCurrentInput = props.setCurrentInput
 
     return (
         <Space
@@ -27,6 +28,7 @@ const InfoFields = (props) => {
             size={size}
             align={align}>
             <Button onClick={()=>{
+                setCurrentInput(" ")
                 setUpdateName(false)
                 setUpdateEmail(false)
                 setUpdatePhoneNumber(false)
@@ -36,6 +38,7 @@ const InfoFields = (props) => {
                 Имя: {name}
             </p>
             <Button onClick={()=>{
+                setCurrentInput(" ")
                 setUpdateName(true)
                 setUpdateEmail(false)
                 setUpdatePhoneNumber(false)
@@ -46,6 +49,7 @@ const InfoFields = (props) => {
                 Почта: {email}
             </p>
             <Button onClick={()=>{
+                setCurrentInput(" ")
                 setUpdateName(false)
                 setUpdateEmail(true)
                 setUpdatePhoneNumber(false)
@@ -56,6 +60,7 @@ const InfoFields = (props) => {
                 Телефон: {phoneNumber}
             </p>
             <Button onClick={()=>{
+                setCurrentInput(" ")
                 setUpdateName(false)
                 setUpdateEmail(false)
                 setUpdatePhoneNumber(true)

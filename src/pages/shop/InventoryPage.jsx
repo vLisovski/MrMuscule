@@ -37,6 +37,7 @@ const InventoryPage = () => {
                     }).catch(
                     () => {
                         setFavorite([])
+                        setLoading(false)
                     }
                 )
             }
