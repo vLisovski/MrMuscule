@@ -1,11 +1,27 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Col} from "antd";
 
 import BonusBalance from "../../../components/account/bonusbalance/BonusBalance";
+import UsersApiWorker from "../../../api/user/UsersApiWorker";
+import LocalStorageWorker from "../../../storage/LocalStorageWorker";
+import {useNavigate} from "react-router-dom";
 
 const BonusesPage = () => {
 
-    let balance = 500
+    let userApi = new UsersApiWorker()
+    let local = new LocalStorageWorker()
+    let navigate = useNavigate()
+
+    let [balance, setBalance] = useState(0)
+
+    useEffect(()=>{
+        userApi.getBonusBalance(local.get("userid"),local.get("token"))
+            .then(response => setBalance(response.data))
+            .catch(error => {
+                navigate("/authorization")
+                console.log(error)
+            })
+    },[])
 
     return (
         <Col style={{display: "flex", flexDirection: "row", flexWrap: "wrap"}}

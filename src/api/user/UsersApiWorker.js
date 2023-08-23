@@ -17,6 +17,22 @@ class UsersApiWorker {
         });
     }
 
+    async getBonusBalance(userId, token){
+        return await this.#axios.get(`/getBonusBalance?userId=${userId}`, {
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        });
+    }
+
+    async getTotalPurchases(userId, token){
+        return await this.#axios.get(`/getTotalPurchases?userId=${userId}`, {
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        });
+    }
+
     async getFavoritesIds(userId, limit, offset, token) {
         return await this.#axios.get(`/getFavoritesIds?userId=${userId}&limit=${limit}&offset=${offset}`, {
             headers: {

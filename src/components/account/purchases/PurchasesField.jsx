@@ -1,21 +1,35 @@
 import React from 'react';
-import {Card, Image} from "antd";
+import {Card, Image, Skeleton} from "antd";
 import Meta from "antd/es/card/Meta";
 
 const PurchasesField = (props) => {
 
-    let purchases = props.purchases
-
-    return purchases.map((item) => {
-        return(<Card
-            style={{background: 'white', marginTop: '30px' , marginLeft: '8px'}}
-            size={"small"}
+    let loading = props.loading
+    return props.cards.map((item) => {
+        return (<Card
+            key={item.id}
+            style={{
+                background: 'white',
+                marginTop: '30px',
+                marginLeft: '8px',
+                width: "250px",
+            }}
+            size={"default"}
+            hoverable
             bordered={true}
-            cover={<Image alt="purchase" width={250} src={item.imgSrc}/>}
-            hoverable={false}>
-            <Meta
-                title={item.title}
-                description={item.description}/>
+            cover={<Image alt="inventory" style={{alignSelf: "center"}} width={250} src={item.photoPath}/>}
+        >
+            <Skeleton loading={loading} avatar active>
+                <Meta
+                    bodyStyle={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "flex-start",
+                        alignContent: "flex-start"
+                    }}
+                    title={item.name}
+                    description={item.description}/>
+            </Skeleton>
         </Card>)
     })
 };
