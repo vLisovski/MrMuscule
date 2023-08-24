@@ -21,7 +21,7 @@ const PersonalInformationField = (props) => {
     let [currentInput,setCurrentInput] = useState(" ");
 
     const updateNameForm = (
-        <Form name="registration"
+        <Form name="updateName"
               labelCol={{
                   span: 8,
               }}
@@ -72,7 +72,7 @@ const PersonalInformationField = (props) => {
         </Form>)
 
     const updateEmailForm = (
-        <Form name="registration"
+        <Form name="updateEmail"
               labelCol={{
                   span: 8,
               }}
@@ -123,7 +123,7 @@ const PersonalInformationField = (props) => {
         </Form>)
 
     const updatePhoneNumberForm = (
-        <Form name="registration"
+        <Form name="updatePhoneNumber"
               labelCol={{
                   span: 8,
               }}
@@ -185,7 +185,7 @@ const PersonalInformationField = (props) => {
                     background: 'white',
             }}>
             <Image width={350} src={currentInput}/>
-            <Form name="registration"
+            <Form name="updateAvatar"
                   labelCol={{
                       span: 8,
                   }}
