@@ -3,10 +3,10 @@ import {Col, Dropdown, Pagination, Skeleton, Space} from "antd";
 import PurchasesField from "../../../components/account/purchases/PurchasesField";
 import UsersApiWorker from "../../../api/user/UsersApiWorker";
 import LocalStorageWorker from "../../../storage/LocalStorageWorker";
-import ShopItems from "../../../components/shop/ShopItems";
 import Card from "antd/es/card/Card";
 import Meta from "antd/es/card/Meta";
 import {DownOutlined} from "@ant-design/icons";
+import {useNavigate} from "react-router-dom";
 
 const PurchasesPage = () => {
 
@@ -18,14 +18,18 @@ const PurchasesPage = () => {
     let [offset, setOffset] = useState(0)
     let [total, setTotal] = useState(3)
     let [currentPage, setCurrentPage] = useState(1)
-
+    let navigation = useNavigate()
     useEffect(() => {
 
         userApi.getTotalPurchases(local.get("userid"), local.get("token"))
             .then(response => {
                 setTotal(response.data)
             })
-            .catch(error => console.log(error))
+            .catch(error => {
+                local.save("location",window.location.href)
+                navigation("/authorization")
+                console.log(error)
+            })
 
         userApi.getPurchases(local.get("userid"), limit, offset, local.get("token"))
             .then(response => {

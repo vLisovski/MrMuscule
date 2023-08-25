@@ -27,6 +27,22 @@ class CartApi {
         });
     }
 
+    async getProductIds(userId, token) {
+        return await this.#axios.get(`/getProductIds?userId=${userId}`,{
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        });
+    }
+
+    async addCart(carts, token){
+        return await this.#axios.post("/addCart", carts, {
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        });
+    }
+
     async clearCart(userId, token) {
         return await this.#axios.delete(`/clearCart?userId=${userId}`,{
             headers: {
@@ -43,13 +59,23 @@ class CartApi {
         });
     }
 
-    async getByUserId(userId, token) {
-        return await this.#axios.get(`/getCart?userId=${userId}`,{
+    async getByUserId(userId, token, limit, offset) {
+        return await this.#axios.get(`/getCart?userId=${userId}&limit=${limit}&offset=${offset}`,{
             headers: {
                 "Authorization": "Bearer " + token
             }
         });
     }
+
+    async makeOrderByUserId(userId, token, order){
+        return await this.#axios.post("/addOrder", order,{
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        });
+    }
+
+
 }
 
 export default CartApi;

@@ -1,5 +1,5 @@
 import './App.css';
-import {Redirect, Route, Routes} from "react-router-dom";
+import {Route, Routes} from "react-router-dom";
 import RegistrationPage from "./pages/registration/RegistrationPage";
 import AuthPage from "./pages/authpage/AuthPage";
 import Header from "./components/header/Header";
@@ -9,9 +9,6 @@ import FoodPage from "./pages/shop/FoodPage";
 import CartWindow from "./pages/cart/CartWindow";
 import AccountPage from "./pages/account/AccountPage";
 import RedirectPage from "./pages/shop/RedirectPage";
-import Footer from "./components/footer/Footer";
-//TODO пагинация на страницах
-//TODO удаление товаров из избранного
 function App() {
   return (
       <>

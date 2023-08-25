@@ -6,6 +6,7 @@ import {DownOutlined} from "@ant-design/icons";
 import ShopItems from "../../../components/shop/ShopItems";
 import Meta from "antd/es/card/Meta";
 import Card from "antd/es/card/Card";
+import {useNavigate} from "react-router-dom";
 
 const FavoritePage = () => {
 
@@ -19,14 +20,19 @@ const FavoritePage = () => {
     let [currentPage, setCurrentPage] = useState(1)
     let [cart, setCart] = useState(local.get("cart"))
     let [favorite, setFavorite] = useState([,])
-
+    let navigate = useNavigate()
     useEffect(() => {
 
         userApi.getTotalFavorites(local.get("userid"), local.get("token"))
             .then(response => {
-                setTotal(response.data)
+                setTotal(response)
             })
-            .catch(error => console.log(error))
+            .catch(error => {
+                console.log(error)
+                local.save("location", window.location.href)
+                navigate("/authorization")
+
+            })
 
         userApi.getFavoritesIds(local.get("userid"), total, 0, local.get("token"))
             .then(response => setFavorite(response.data))
@@ -38,8 +44,6 @@ const FavoritePage = () => {
                 setLoading(false)
             })
             .catch(error => console.log(error))
-
-        console.log(favorite)
 
     }, [limit, offset])
 

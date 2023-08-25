@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 
-import {Alert, Col, Dropdown, Pagination, Skeleton, Space, Spin} from "antd";
+import {Alert, Col, Dropdown, Pagination, Space, Spin} from "antd";
 import ShopPageApi from "../../api/shop/ShopPageApi";
 import {DownOutlined} from "@ant-design/icons";
 import ShopItems from "../../components/shop/ShopItems";
@@ -8,8 +8,7 @@ import Footer from "../../components/footer/Footer";
 import LocalStorageWorker from "../../storage/LocalStorageWorker";
 import CartApi from "../../api/cart/CartApi";
 import UsersApiWorker from "../../api/user/UsersApiWorker";
-import Meta from "antd/es/card/Meta";
-import Card from "antd/es/card/Card";
+import {useNavigate} from "react-router-dom";
 
 const InventoryPage = () => {
 
@@ -25,7 +24,7 @@ const InventoryPage = () => {
     let [total, setTotal] = useState(0)
     let [cart, setCart] = useState([])
     let [favorite, setFavorite] = useState([])
-
+    let navigation = useNavigate()
     useEffect(() => {
         shopPageApi.getTotalInventory().then(response => {
             setTotal(response.data)
@@ -33,13 +32,25 @@ const InventoryPage = () => {
                 userApi.getFavoritesIds(localStorageWorker.get("userid"), response.data, 0, localStorageWorker.get("token"))
                     .then(response => {
                         setFavorite(response.data)
-                        setLoading(false)
+
                     }).catch(
                     () => {
                         setFavorite([])
                         setLoading(false)
                     }
                 )
+                cartApi.getProductIds(localStorageWorker.get("userid"),localStorageWorker.get("token"))
+                    .then(response=>{
+                        setCart(response.data)
+                        console.log("cart" + cart)
+                        localStorageWorker.save("cart", cart)
+                        setLoading(false)
+                    })
+                    .catch(error=>{
+                        console.log(error)
+                        setCart(localStorageWorker.get("cart"))
+                        setLoading(false)
+                    })
             }
         }).catch(
             error => {
@@ -57,8 +68,7 @@ const InventoryPage = () => {
     }, [limit, offset])
 
     useEffect(() => {
-        localStorageWorker.save("cart", cart)
-        console.log("CART" + cart)
+        console.log("CART "+cart)
     }, [cart])
 
     useEffect(() => {
@@ -166,7 +176,9 @@ const InventoryPage = () => {
                                            favorite={favorite}
                                            setCart={setCart}
                                            setFavorite={setFavorite}
-                                           cards={cards}/>
+                                           cards={cards}
+                                           navigation={navigation}
+                                />
                             </Col>
                             <Space style={{
                                 display: "flex",

@@ -3,11 +3,13 @@ import Meta from "antd/es/card/Meta";
 import {ShoppingCartOutlined, StarOutlined} from "@ant-design/icons";
 import LocalStorageWorker from "../../storage/LocalStorageWorker";
 import UsersApiWorker from "../../api/user/UsersApiWorker";
+import CartApi from "../../api/cart/CartApi";
 
 const ShopItems = (props) => {
 
     let localStorageWorker = new LocalStorageWorker();
     let loading = props.loading
+
     return props.cards.map((item) => {
         return (<Card
             key={item.id}
@@ -39,31 +41,79 @@ const ShopItems = (props) => {
 };
 
 function pushActions(localStorageWorker, id, props) {
-
+    let local = new LocalStorageWorker()
     let actions
-
     if (localStorageWorker.get("token") != null && props.favorite.length>0) {
         if (props.favorite.includes(id)) {
-            actions = [<ShoppingCartOutlined onClick={() => {
-            }} key="cart"/>, <StarOutlined style={{color: "yellow"}} onClick={() => {
-                deleteFromFavorite(props, id)
-            }} key="favorite"/>]
+            if(props.cart.includes(id)){
+                actions = [<>Товар в корзине</>,<StarOutlined style={{color: "yellow"}} onClick={() => {
+                    deleteFromFavorite(props, id)
+                }} key="favorite"/>]
+            }else{
+                actions = [<ShoppingCartOutlined onClick={() => {
+                    addToCart(props, id)
+                }} key="cart"/>, <StarOutlined style={{color: "yellow"}} onClick={() => {
+                    deleteFromFavorite(props, id)
+                }} key="favorite"/>]
+            }
         } else {
-            actions = [<ShoppingCartOutlined onClick={() => {
-            }} key="cart"/>, <StarOutlined style={{color: "black"}} onClick={() => {
-                addToFavorite(props, id)
-            }} key="favorite"/>]
+            if(props.cart.includes(id)){
+                actions = [<>Товар в корзине</>,<StarOutlined style={{color: "black"}} onClick={() => {
+                    addToFavorite(props, id)
+                }} key="favorite"/> ]
+            }else {
+                actions = [<ShoppingCartOutlined onClick={() => {
+                    addToCart(props, id)
+                }} key="cart"/>, <StarOutlined style={{color: "black"}} onClick={() => {
+                    addToFavorite(props, id)
+                }} key="favorite"/>]
+            }
         }
     } else {
-        actions = [<ShoppingCartOutlined onClick={() => {
-        }} key="cart"/>]
+        if(props.cart.includes(id)){
+            actions = [<>Товар в корзине</>]
+        }else{
+            actions = [<ShoppingCartOutlined onClick={() => {
+                console.log(local.get("cart"))
+
+                let cart =  local.get("cart").split(",")
+
+                if(cart[0]===''){
+                    cart[0] = id
+                }else{
+                    cart.push(id)
+                }
+
+                local.save("cart", cart)
+                props.setCart(cart)
+            }} key="cart"/>]
+        }
     }
 
     return actions
 }
 
 function addToCart(props, id) {
+
+    let cartApi = new CartApi()
+    let local = new LocalStorageWorker()
+
     props.setCart([...props.cart, id])
+    cartApi.addProduct({
+        userId: local.get("userid"),
+        productId: id
+    },local.get("token"))
+        .then(response => {
+            if(response.data===0){
+                alert("такой продукт уже есть в корзине")
+            }
+        })
+        .catch(error => {
+            local.save("location", window.location.href)
+            props.navigation("/authorization")
+            console.log(error)
+        })
+
 }
 
 function addToFavorite(props, id) {
@@ -80,6 +130,7 @@ function deleteFromFavorite(props, id){
 
     let userApi = new UsersApiWorker()
     let local = new LocalStorageWorker()
+
     userApi.deleteFavorite({
         userId: local.get("userid"),
         productId: id

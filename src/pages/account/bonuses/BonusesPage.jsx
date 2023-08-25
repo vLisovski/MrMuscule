@@ -12,12 +12,14 @@ const BonusesPage = () => {
     let local = new LocalStorageWorker()
     let navigate = useNavigate()
 
+
     let [balance, setBalance] = useState(0)
 
     useEffect(()=>{
         userApi.getBonusBalance(local.get("userid"),local.get("token"))
             .then(response => setBalance(response.data))
             .catch(error => {
+                local.save("location",window.location.href)
                 navigate("/authorization")
                 console.log(error)
             })

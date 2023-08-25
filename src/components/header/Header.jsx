@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {Menu, Space} from 'antd';
 import {useState} from 'react';
 import {HomeOutlined, ShoppingCartOutlined, UserOutlined} from "@ant-design/icons";
-import {NavLink, useNavigate} from "react-router-dom"
+import {NavLink} from "react-router-dom"
 import LocalStorageWorker from "../../storage/LocalStorageWorker";
 const items = [
     {
@@ -44,7 +44,9 @@ const Header = () => {
         setCurrent(localStorageWorker.get("menu"))
     };
 
-    useEffect(()=>{setCurrent(localStorageWorker.get("menu"))},[window.location.href]);
+    useEffect(()=>{
+        setCurrent(localStorageWorker.get("menu"))
+    },[window.location.href]);
 
     return (
         <Menu style={{ display: 'block',

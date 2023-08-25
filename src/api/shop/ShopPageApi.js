@@ -32,6 +32,13 @@ class ShopPageApi {
     async getTotalClothes(){
         return await this.#axios.get("/getTotal/clothes");
     }
+
+    async getAllByProductsIds(productsIds){
+
+        console.log("PRODUCTS IDS " + productsIds)
+
+        return await this.#axios.post(`/getAllByIdList`, productsIds)
+    }
 }
 
 export default ShopPageApi

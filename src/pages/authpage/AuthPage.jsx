@@ -4,6 +4,7 @@ import {NavLink, useNavigate} from "react-router-dom";
 import AuthOrRegister from "../../api/auth/AuthOrRegister";
 import LocalStorageWorker from "../../storage/LocalStorageWorker";
 import UsersApiWorker from "../../api/user/UsersApiWorker";
+import CartApi from "../../api/cart/CartApi";
 
 const onFinishFailed = (errorInfo) => {
     console.log('Failed', errorInfo);
@@ -20,6 +21,7 @@ const AuthPage = () => {
     let localStorageWorker = new LocalStorageWorker();
     let authOrRegister = new AuthOrRegister();
     let usersApiWorker = new UsersApiWorker();
+    let cartApi = new CartApi()
     let navigate = useNavigate();
 
     let onFinish = (values) => {
@@ -35,16 +37,24 @@ const AuthPage = () => {
                     response => {
                         let userid = response.data;
                         localStorageWorker.save("userid", userid);
-                        navigate("/account/info");
+
+                        if(localStorageWorker.get("cart").split(",").length!==0){
+                            cartApi.addCart({carts: localStorageWorker.get("cart").split(",")}, localStorageWorker.get("token"))
+                                .catch(error => console.log(error))
+                        }
+
+                        navigate(localStorageWorker.get("location").substr(21));
                     }
                 ).catch(
                     error => {
-                        alert(error);
+                        alert("Неверный логин или пароль!");
+                        console.log(error)
                     }
                 )
             }).catch(
             error => {
-                alert(error)
+                alert("Неверный логин или пароль!")
+                console.log(error)
             }
         )
     };

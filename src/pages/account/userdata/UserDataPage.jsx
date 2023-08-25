@@ -29,6 +29,7 @@ const UserDataPage = () => {
                 .catch(error => {
                     console.log(error)
                     setLoading(false)
+                    local.save("location",window.location.href)
                     navigate("/authorization")
                     }
                 )
