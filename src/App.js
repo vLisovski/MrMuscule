@@ -9,23 +9,34 @@ import FoodPage from "./pages/shop/FoodPage";
 import CartWindow from "./pages/cart/CartWindow";
 import AccountPage from "./pages/account/AccountPage";
 import RedirectPage from "./pages/shop/RedirectPage";
-function App() {
-  return (
-      <>
-          <Header/>
-          <Routes>
-              <Route path="/" element={<RedirectPage/>}/>
-              <Route path="/inventory" element={<InventoryPage/>}/>
-              <Route path="/clothes" element={<ClothesPage/>}/>
-              <Route path="/food" element={<FoodPage/>}/>
-              <Route path="/cart" element={<CartWindow/>}/>
-              <Route path="/account/*" element={<AccountPage/>}/>
-              <Route path="/registration" element={<RegistrationPage/>}/>
-              <Route path="/authorization" element={<AuthPage/>}/>
-          </Routes>
-      </>
+import {useState} from "react";
+import LocalStorageWorker from "./storage/LocalStorageWorker";
 
-  );
+function App() {
+
+    let local = new LocalStorageWorker()
+    let [cartCount, setCartCount] = useState(local.get("cartcounter"))
+    const updateCartCounter = (count) => {
+        setCartCount(count)
+        local.save("cartcounter",count)
+    }
+
+    return (
+        <>
+            <Header cartCount={cartCount}/>
+            <Routes>
+                <Route path="/" element={<RedirectPage/>}/>
+                <Route path="/inventory" element={<InventoryPage updateCartCounter={updateCartCounter}/>}/>
+                <Route path="/clothes" element={<ClothesPage updateCartCounter={updateCartCounter}/>}/>
+                <Route path="/food" element={<FoodPage updateCartCounter={updateCartCounter}/>}/>
+                <Route path="/cart" element={<CartWindow cartCount={cartCount} updateCartCounter={updateCartCounter}/>}/>
+                <Route path="/account/*" element={<AccountPage/>}/>
+                <Route path="/registration" element={<RegistrationPage/>}/>
+                <Route path="/authorization" element={<AuthPage />}/>
+            </Routes>
+        </>
+
+    );
 }
 
 export default App;

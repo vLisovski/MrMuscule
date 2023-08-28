@@ -1,5 +1,5 @@
-import React from 'react';
-import {List, Button, Col, Image, Card} from "antd";
+import React, {useEffect} from 'react';
+import {List, Col, Image, Card} from "antd";
 import Meta from "antd/es/card/Meta";
 import {DeleteOutlined} from "@ant-design/icons";
 import CartApi from "../../api/cart/CartApi";
@@ -12,6 +12,7 @@ const Cart = (props) => {
     let cartApi = new CartApi()
     let local = new LocalStorageWorker()
     let navigation = useNavigate()
+
     return (
         <Col span={16} offset={4} style={{
             marginTop: "30px"
@@ -20,10 +21,29 @@ const Cart = (props) => {
                 itemLayout="horizontal"
                 dataSource={data}
                 renderItem={(item, index) => (
-                    <List.Item key={index}>
+                    <List.Item key={index} actions={[
+                       <DeleteOutlined style={{fontSize: "20px", color: "black"}} onClick={() => {
+                           let data2 = data.filter((item)=>item.id!==data[index].id)
+                           let data3 = []
+                           for (let i = 0; i < data2.length; i++) {
+                               data3.push(data2[i].id)
+                           }
+                           local.save("cart", data3)
+                           props.updateCartCounter(data.length-1)
+                           cartApi.deleteProduct(item.id, local.get("token"))
+                               .then(()=>alert("товар " + item.name +" удален из корзины"))
+                               .catch(error => {
+                                   //local.save("location", window.location.href)
+                                   //navigation("/authorization")
+                                   console.log(error)
+                               })
+                           window.location.reload()
+                       }} />
+                    ]}>
                         <List.Item.Meta
                             avatar={<Image src={item.photoPath} width={250}/>}
                             title={<p>{item.name}</p>}
+
                             description={
                                 <>
                                     <p>{item.description}</p>
@@ -41,16 +61,6 @@ const Cart = (props) => {
                                 </>
                             }
                         />
-                        <Button style={{width: "60px", height: "40px"}} onClick={() => {
-                            cartApi.deleteProduct(item.id, local.get("token"))
-                                .then(alert("товар удален из корзины"))
-                                .catch(error => {
-                                    local.save("location", window.location.href)
-                                    navigation("/authorization")
-                                    console.log(error)
-                                })
-                            window.location.reload()
-                        }}><DeleteOutlined style={{fontSize: "20px"}}/></Button>
                     </List.Item>
                 )}
             />

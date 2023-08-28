@@ -37,7 +37,6 @@ const AuthPage = () => {
                     response => {
                         let userid = response.data;
                         localStorageWorker.save("userid", userid);
-
                         if(localStorageWorker.get("cart").split(",").length!==0){
                             cartApi.addCart({carts: localStorageWorker.get("cart").split(",")}, localStorageWorker.get("token"))
                                 .catch(error => console.log(error))

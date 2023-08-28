@@ -10,7 +10,7 @@ import CartApi from "../../api/cart/CartApi";
 import UsersApiWorker from "../../api/user/UsersApiWorker";
 import {useNavigate} from "react-router-dom";
 
-const InventoryPage = () => {
+const InventoryPage = (props) => {
 
     let cartApi = new CartApi()
     let userApi = new UsersApiWorker()
@@ -69,6 +69,7 @@ const InventoryPage = () => {
 
     useEffect(() => {
         console.log("CART "+cart)
+        props.updateCartCounter(cart.length)
     }, [cart])
 
     useEffect(() => {
