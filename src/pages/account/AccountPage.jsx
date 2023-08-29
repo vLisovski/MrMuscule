@@ -5,7 +5,7 @@ import {Routes, Route, useNavigate} from "react-router-dom";
 import UserDataPage from "./userdata/UserDataPage";
 import FavoritePage from "./favorite/FavoritePage";
 import PurchasesPage from "./purchases/PurchasesPage";
-import ReturnsPage from "./returns/ReturnsPage";
+import OrdersPage from "./orders/OrdersPage";
 import BonusesPage from "./bonuses/BonusesPage";
 import LocalStorageWorker from "../../storage/LocalStorageWorker";
 
@@ -39,7 +39,7 @@ const AccountPage = () => {
                             <Route path="/info" element={<UserDataPage/>}/>
                             <Route path="/favorite" element={<FavoritePage/>}/>
                             <Route path="/purchases" element={<PurchasesPage/>}/>
-                            <Route path="/returns" element={<ReturnsPage/>}/>
+                            <Route path="/returns" element={<OrdersPage/>}/>
                             <Route path="/bonuses" element={<BonusesPage/>}/>
                         </Routes>
                     </Row>

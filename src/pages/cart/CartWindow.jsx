@@ -2,10 +2,10 @@ import React, {useEffect, useState} from 'react';
 import Cart from "../../components/cart/Cart";
 import CartApi from "../../api/cart/CartApi";
 import LocalStorageWorker from "../../storage/LocalStorageWorker";
-import {useNavigate} from "react-router-dom";
-import {Button, Dropdown, Pagination, Space} from "antd";
-import {DownOutlined, ShoppingCartOutlined} from "@ant-design/icons";
-import ModalButton from "../../components/shared/ModalButton";
+import {NavLink, useNavigate} from "react-router-dom";
+import {Button, Col, Space} from "antd";
+import {ShoppingCartOutlined} from "@ant-design/icons";
+import MakeOrderButton from "./MakeOrderButton";
 import ShopPageApi from "../../api/shop/ShopPageApi";
 import UsersApiWorker from "../../api/user/UsersApiWorker";
 
@@ -16,57 +16,32 @@ const CartWindow = (props) => {
     let local = new LocalStorageWorker()
 
     let [data, setData] = useState([])
-    let [total, setTotal] = useState(0)
-    let [limit, setLimit] = useState(3)
-    let [offset, setOffset] = useState(0)
-    let [currentPage, setCurrentPage] = useState(1)
     let [buyBonuses, setBuyBonuses] = useState(0)
     let [cost, setCost] = useState(0)
-    let [bonusBalance, setBonusBalance] = useState(500)
+    let [bonusBalance, setBonusBalance] = useState()
+    let [authorized, setAuthorized] = useState()
     let navigate = useNavigate()
     let userApi = new UsersApiWorker()
 
-    const onClick = ({key}) => {
-        setLimit(key)
-    };
-
-    const onChange = (page) => {
-        setCurrentPage(page)
-        setOffset(limit * (page - 1))
-    }
-
-    const items = [
-        {
-            label: "3",
-            key: '3',
-        },
-        {
-            label: '6',
-            key: '6',
-        },
-        {
-            label: '9',
-            key: '9',
-        },
-    ];
 
     useEffect(() => {
-        cartApi.getTotalProduct(local.get("userid"), local.get("token"))
+        props.setCurrent("cart")
+        cartApi.getByUserId(local.get("userid"), local.get("token"))
             .then(response => {
-                setTotal(response.data)
-                local.save("cartcount", response.data)
-                cartApi.getByUserId(local.get("userid"), local.get("token"), limit, offset)
-                    .then(response => setData(response.data.cart))
+                setAuthorized(true)
+                setData(response.data.cart)
+                userApi.getBonusBalance(local.get("userid"), local.get("token"))
+                    .then((response) => {
+                        setBonusBalance(response.data)
+                    })
                     .catch(error => {
                         console.log(error)
                     })
-                setBonusBalance(userApi.getBonusBalance(local.get("userid"), local.get("token"))
-                    .then((response) => {
-                        setBonusBalance(response.data)
-                    }))
-            })
+                }
+            )
             .catch(error => {
-                setTotal(local.get("cart").split(",").length)
+                setAuthorized(false)
+                console.log(error)
                 local.save("cartcount", local.get("cart").split(",").length)
                 shopPageApi.getAllByProductsIds({
                     ids: local.get("cart")
@@ -78,34 +53,12 @@ const CartWindow = (props) => {
                     .catch(error => {
                         console.log(error)
                     });
-                console.log(error)
             })
 
-        setBuyBonuses(() => {
-            let summ = 0
-            for (let i = 0; i < data.length; i++) {
-                summ = summ + data[i].bonuses
-            }
-            return summ
-        })
+       callBackFromDeleteClick()
 
-        setCost(() => {
-            let summ = 0
-            for (let i = 0; i < data.length; i++) {
-                summ = summ + data[i].price
-            }
-            return summ
-        })
+    }, [])
 
-
-    }, [limit, offset])
-
-    //TODO сделать пагинацию при logout корзине
-    //TODO исправить поведение "добавлено в корзину" на карточках с товаром
-    //TODO дописать все поля на карточках товаров
-    //TODO в модальном окне добавить поле с балансом бонусов
-    //TODO привязать кнопку офорить заказ к api методу
-    //TODO не отрисовывать кнопку оформления заказа, если ошибка получения данных с сервера
     const callBackFromDeleteClick = () => {
 
         setBuyBonuses(() => {
@@ -145,37 +98,16 @@ const CartWindow = (props) => {
                     data.length > 0
                         ?
                         <>
-                            <Pagination onChange={onChange}
-                                        defaultCurrent={1}
-                                        defaultPageSize={1}
-                                        total={total}
-                                        pageSize={limit}
-                                        current={currentPage}/>
-                            <Dropdown
-                                menu={{
-                                    items,
-                                    onClick,
-                                }}
-                            >
-                                <a onClick={(e) => e.preventDefault()}>
-                                    <Space>
-                                        Товаров на странице:
-                                        <DownOutlined/>
-                                    </Space>
-                                </a>
-                            </Dropdown>
                         </>
                         :
-                        <p style={{fontSize: "35px"}}><ShoppingCartOutlined style={{color: "darkgray"}}/> Корзина пуста
-                        </p>
+                        <p style={{fontSize: "35px"}}><ShoppingCartOutlined style={{color: "darkgray"}}/> Корзина пуста</p>
                 }
-
                 {
                     data.length > 0
                         ?
                         <>
-                            <ModalButton callBackFromDeleteClick={callBackFromDeleteClick} bonusBalance={bonusBalance} buyBonuses={buyBonuses} cost={cost}
-                                         navigate={navigate}/>
+                            {authorized ? <MakeOrderButton callBackFromDeleteClick={callBackFromDeleteClick} bonusBalance={bonusBalance} buyBonuses={buyBonuses} cost={cost}
+                                                           navigate={navigate}/> : <></>}
                             <Button onClick={() => {
                                 cartApi.clearCart(local.get("userid"), local.get("token")).catch(error => console.log(error))
                                 local.save("cart", [])
@@ -186,6 +118,22 @@ const CartWindow = (props) => {
                         :
                         <></>
                 }
+            </Space>
+            <Space style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                marginTop: "30px"
+            }}>
+                {!authorized && data.length > 0
+                    ?
+                    <Col span={24}>
+                        <p style={{color: "black"}}>
+                            <NavLink to="/authorization">Авторизируйтесь</NavLink>, чтобы сделать заказ
+                        </p>
+                    </Col>
+                    :
+                    <></>}
             </Space>
         </>
     );

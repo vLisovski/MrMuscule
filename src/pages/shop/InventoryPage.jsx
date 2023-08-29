@@ -25,7 +25,9 @@ const InventoryPage = (props) => {
     let [cart, setCart] = useState([])
     let [favorite, setFavorite] = useState([])
     let navigation = useNavigate()
+
     useEffect(() => {
+        props.setCurrent("inventory")
         shopPageApi.getTotalInventory().then(response => {
             setTotal(response.data)
             if (localStorageWorker.get("token") != null && localStorageWorker.get("userid") != null) {
@@ -42,13 +44,13 @@ const InventoryPage = (props) => {
                 cartApi.getProductIds(localStorageWorker.get("userid"),localStorageWorker.get("token"))
                     .then(response=>{
                         setCart(response.data)
-                        console.log("cart" + cart)
+                        console.log("CART" + cart)
                         localStorageWorker.save("cart", cart)
                         setLoading(false)
                     })
                     .catch(error=>{
                         console.log(error)
-                        setCart(localStorageWorker.get("cart"))
+                        setCart(localStorageWorker.get("cart").split(","))
                         setLoading(false)
                     })
             }
@@ -60,6 +62,7 @@ const InventoryPage = (props) => {
 
         shopPageApi.getAllInventory(limit, offset).then(response => {
             setCards(response.data)
+            setLoading(false)
         }).catch(
             error => {
                 alert(error)
@@ -68,8 +71,10 @@ const InventoryPage = (props) => {
     }, [limit, offset])
 
     useEffect(() => {
-        console.log("CART "+cart)
-        props.updateCartCounter(cart.length)
+        console.log("CART" + cart)
+        if(cart[0]!==''){
+            props.updateCartCounter(cart.length)
+        }
     }, [cart])
 
     useEffect(() => {

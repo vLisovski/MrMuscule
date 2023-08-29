@@ -5,7 +5,7 @@ import ShopPageApi from "../../api/shop/ShopPageApi";
 import {DownOutlined} from "@ant-design/icons";
 import ShopItems from "../../components/shop/ShopItems";
 
-const ClothesPage = () => {
+const ClothesPage = (props) => {
     let shopPageApi = new ShopPageApi()
 
     let [cards, setCards] = useState([])
@@ -15,6 +15,7 @@ const ClothesPage = () => {
     let [total, setTotal] = useState(0)
 
     useEffect(() => {
+        props.setCurrent("clothes")
         shopPageApi.getTotalClothes().then(response => {
             setTotal(response.data)
             console.log(total)

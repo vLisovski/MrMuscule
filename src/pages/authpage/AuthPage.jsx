@@ -10,7 +10,7 @@ const onFinishFailed = (errorInfo) => {
     console.log('Failed', errorInfo);
 }
 
-const AuthPage = () => {
+const AuthPage = (props) => {
     let [validEmail, setValidEmail] = useState(false);
     let validRegexEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     let [email, setEmail] = useState("");
@@ -37,11 +37,18 @@ const AuthPage = () => {
                     response => {
                         let userid = response.data;
                         localStorageWorker.save("userid", userid);
-                        if(localStorageWorker.get("cart").split(",").length!==0){
-                            cartApi.addCart({carts: localStorageWorker.get("cart").split(",")}, localStorageWorker.get("token"))
-                                .catch(error => console.log(error))
-                        }
+                        if(localStorageWorker.get("cart").split(",").length>0){
 
+                            cartApi.clearCart(userid, token)
+                                .catch(error => console.log(error))
+
+                            cartApi.addCart({
+                                userId: userid,
+                                carts: localStorageWorker.get("cart").split(",")
+                            }, localStorageWorker.get("token"))
+                                .catch(error => console.log(error))
+
+                        }
                         navigate(localStorageWorker.get("location").substr(21));
                     }
                 ).catch(
@@ -59,6 +66,7 @@ const AuthPage = () => {
     };
 
     useEffect(() => {
+        props.setCurrent("account")
         if (validPassword && validEmail) {
             setRgba("rgba(0, 200, 0, 0.2)")
         } else {

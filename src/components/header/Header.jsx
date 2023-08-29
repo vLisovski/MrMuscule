@@ -13,8 +13,8 @@ const IconText = ({ icon, text }) => (
 );
 
 const Header = (props) => {
-    const localStorageWorker = new LocalStorageWorker();
-    let [current, setCurrent] = useState(localStorageWorker.get("menu"));
+    // const localStorageWorker = new LocalStorageWorker();
+    // let [current, setCurrent] = useState(localStorageWorker.get("menu"));
 
     const items = [
         {
@@ -56,14 +56,14 @@ const Header = (props) => {
     ];
 
     // const[currentPlace,setCurrentPlace] = useState(navigate.options.currentLocation);
-    const onClick = (e) => {
-        localStorageWorker.save("menu",e.key)
-        setCurrent(localStorageWorker.get("menu"))
-    };
+    // const onClick = (e) => {
+    //     localStorageWorker.save("menu",e.key)
+    //     setCurrent(localStorageWorker.get("menu"))
+    // };
 
-    useEffect(()=>{
-        setCurrent(localStorageWorker.get("menu"))
-    },[window.location.href]);
+    // useEffect(() => {
+    //    setCurrent(localStorageWorker.get("menu"))
+    // },[window.location.href]);
 
     return (
         <Menu style={{ display: 'block',
@@ -71,8 +71,8 @@ const Header = (props) => {
             height: '50px',
             backgroundColor: "white",
             boxShadow: "0px 0px 40px 0px rgba(0, 0, 0, 0.2)"}}
-              onClick={onClick}
-              selectedKeys={current}
+              // onClick={onClick}
+              selectedKeys={props.current}
               theme="light"
               mode="horizontal"
               items={items}/>
