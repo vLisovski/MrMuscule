@@ -68,7 +68,7 @@ const AuthPage = (props) => {
     useEffect(() => {
         props.setCurrent("account")
         if (validPassword && validEmail) {
-            setRgba("rgba(0, 200, 0, 0.2)")
+            setRgba("rgba(0,0,200,0.2)")
         } else {
             setRgba("rgba(200, 0, 0, 0.2)")
         }
@@ -172,7 +172,7 @@ const AuthPage = (props) => {
                         </Form.Item>
                         : <small/>}
                     <Col span={6} offset={8}>
-                        <NavLink to="/registration"> Зарегистрироваться</NavLink>
+                        <NavLink to="/registration">Зарегистрироваться</NavLink>
                     </Col>
                 </Form>
             </Col>
