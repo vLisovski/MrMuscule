@@ -13,6 +13,7 @@ const AccountPage = () => {
     let [isAuth, setAuth] = useState(false)
     let localStorageWorker = new LocalStorageWorker();
     let navigate = useNavigate();
+
     useEffect(() => {
         let token = localStorageWorker.get("token");
         let userid = localStorageWorker.get("userid");
@@ -39,7 +40,7 @@ const AccountPage = () => {
                             <Route path="/info" element={<UserDataPage/>}/>
                             <Route path="/favorite" element={<FavoritePage/>}/>
                             <Route path="/purchases" element={<PurchasesPage/>}/>
-                            <Route path="/returns" element={<OrdersPage/>}/>
+                            <Route path="/orders" element={<OrdersPage/>}/>
                             <Route path="/bonuses" element={<BonusesPage/>}/>
                         </Routes>
                     </Row>

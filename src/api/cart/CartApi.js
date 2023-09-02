@@ -67,15 +67,6 @@ class CartApi {
         });
     }
 
-    async makeOrderByUserId(userId, token, order){
-        return await this.#axios.post("/addOrder", order,{
-            headers: {
-                "Authorization": "Bearer " + token
-            }
-        });
-    }
-
-
 }
 
 export default CartApi;

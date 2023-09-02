@@ -1,27 +1,59 @@
-import React from 'react';
-import {Col} from "antd";
-import Returns from "../../../components/account/returns/Returns";
+import React, {useEffect, useState} from 'react';
+import {Col, List, Space} from "antd";
+import OrderApi from "../../../api/order/OrderApi";
+import LocalStorageWorker from "../../../storage/LocalStorageWorker";
+import Card from "antd/es/card/Card";
 
 const OrdersPage = () => {
-    let returns = [{
-        imgSrc: "https://tipik.ru/wp-content/uploads/2023/02/%D0%9B%D1%83%D1%87%D1%88%D0%B8%D0%B5-%D0%B0%D0%BD%D0%B8%D0%BC%D0%B5-%D0%B0%D0%B2%D0%B0%D1%82%D0%B0%D1%80%D0%BA%D0%B8-%D0%B4%D0%BB%D1%8F-Discord_009.jpg",
-        title: "Возврат",
-        description: "Описание"
-    }, {
-        imgSrc: "https://tipik.ru/wp-content/uploads/2023/02/%D0%9B%D1%83%D1%87%D1%88%D0%B8%D0%B5-%D0%B0%D0%BD%D0%B8%D0%BC%D0%B5-%D0%B0%D0%B2%D0%B0%D1%82%D0%B0%D1%80%D0%BA%D0%B8-%D0%B4%D0%BB%D1%8F-Discord_009.jpg",
-        title: "Возврат",
-        description: "Описание"
-    }, {
-        imgSrc: "https://tipik.ru/wp-content/uploads/2023/02/%D0%9B%D1%83%D1%87%D1%88%D0%B8%D0%B5-%D0%B0%D0%BD%D0%B8%D0%BC%D0%B5-%D0%B0%D0%B2%D0%B0%D1%82%D0%B0%D1%80%D0%BA%D0%B8-%D0%B4%D0%BB%D1%8F-Discord_009.jpg",
-        title: "Возврат",
-        description: "Описание"
-    }]
+
+    let [orders, setOrders] = useState([])
+
+    let orderApi = new OrderApi()
+    let local = new LocalStorageWorker()
+
+    useEffect(()=>{
+        console.log("ORDERSPAGELOADED")
+        orderApi.getOrdersByUserId(local.get("userid"), local.get("token"))
+            .then((response) => {
+                console.log("ORDERS RESPONSE"+response.data)
+                setOrders(response.data)
+            })
+            .catch(error=>{
+                console.log("ORDERS GET ERROR"+error)
+            })
+    },[])
+
+
     return (
-        <Col style={{display: "flex", flexDirection: "row", flexWrap: "wrap"}}
-             span={20}
-        >
-            <Returns returns={returns}/>
-        </Col>
+        <Space style={{marginTop: "30px", marginLeft: "8px"}}>
+            <List
+                grid={{
+                    gutter: 16,
+                    xs: 1,
+                    sm: 2,
+                    md: 4,
+                    lg: 4,
+                    xl: 6,
+                    xxl: 3,
+                }}
+                dataSource={orders}
+                renderItem={(order, index) => (
+                    <List.Item key={index}>
+                        <Card title={<>
+                            <p>ID заказа: {order.id}</p>
+                            <p style={{color: "green"}}>Статус заказа: {order.status}</p>
+                            <p>Дата заказа: {order.date}</p>
+                            <p>Стоимость заказа: {order.cost} руб.</p>
+                        </>}>
+                            {
+                            order.productList.map((product)=>{
+                                return <Space>{product.name}</Space>
+                            })
+                        }</Card>
+                    </List.Item>
+                )}
+            />
+        </Space>
     );
 };
 

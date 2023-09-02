@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import {
+    CheckOutlined,
     HeartOutlined,
     IdcardOutlined,
-    RestOutlined,
     ShoppingOutlined,
     WalletOutlined
 } from "@ant-design/icons";
@@ -15,6 +15,11 @@ const AccountPagesMenu = () => {
             icon: <IdcardOutlined/>,
             label: <NavLink to="/account/info">Личная информация</NavLink>,
             key: 'info',
+        },
+        {
+            icon: <CheckOutlined />,
+            label: <NavLink to="/account/orders">Мои заказы</NavLink>,
+            key: 'orders',
         },
         {
             icon: <ShoppingOutlined/>,

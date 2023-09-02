@@ -3,6 +3,7 @@ import {useEffect, useState} from 'react';
 import React from 'react';
 import CartApi from "../../api/cart/CartApi";
 import LocalStorageWorker from "../../storage/LocalStorageWorker";
+import OrderApi from "../../api/order/OrderApi";
 
 const MakeOrderButton = (props) => {
 
@@ -14,6 +15,7 @@ const MakeOrderButton = (props) => {
     let [order, setOrder] = useState()
     let [description, setDescription] = useState()
     const cartApi = new CartApi()
+    const orderApi = new OrderApi()
     const local = new LocalStorageWorker()
 
     useEffect(() => {
@@ -34,19 +36,31 @@ const MakeOrderButton = (props) => {
 
                     setOrder({
                         cost: props.cost,
-                        bonusesToBuy: inputBonuses,
                         description: description,
+                        bonusesToBuy: inputBonuses,
+                        bonusBalance: props.bonusBalance,
                         userId: local.get("userid"),
                         status: "collecting",
-                        productIdsList: local.get("cart").split(",")
+                        productIdsList: [...local.get("cart").split(",")]
                     })
 
-                    cartApi.makeOrderByUserId(local.get("userid"), local.get("token"), order)
+                    orderApi.makeOrderByUserId(local.get("token"), order)
+                        .then(() => {
+                            cartApi.clearCart(local.get("userid"), local.get("token"))
+                                .then((response) => {
+                                    console.log("CLEAR CART RESPONSE " + response)
+                                    local.save("cart", [])
+                                })
+                                .catch((error) => {
+                                    console.log(error)
+                                })
+                            setModalOpen(false)
+                            props.navigate("/account/orders")
+                        })
                         .catch((error) => {
+                            setModalOpen(false)
                             alert(error + "Ошибка оформления заказа")
                         })
-                    setModalOpen(false)
-                    //props.navigate("/")
                 }
                 }
                 onCancel={() => setModalOpen(false)}

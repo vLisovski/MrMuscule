@@ -1,4 +1,5 @@
 import axios from "axios";
+import ShopPageApi from "../shop/ShopPageApi";
 
 class OrderApi {
 
@@ -10,12 +11,20 @@ class OrderApi {
         })
     }
 
-    async getOrdersByUserId(userId){
-        await this.#axios.get(`/getAll?userId=${userId}`)
+    async getOrdersByUserId(userId, token){
+      return await this.#axios.get(`/getAll?userId=${userId}`,{
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        })
     }
 
-    async addNewOrder(insertedItem){
-        await this.#axios.post(`/addOrder`,insertedItem)
+    async makeOrderByUserId(token, order){
+        return await this.#axios.post("/addOrder",order,{
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        });
     }
 
     async deleteOrder(deletedItem){
@@ -23,3 +32,4 @@ class OrderApi {
     }
 }
 
+export default OrderApi
