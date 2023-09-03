@@ -95,7 +95,7 @@ const RegistrationPage = () => {
                             required: true,
                             message: "Введите пароль"
                         }]}>
-                        <Input.Password onChange={event => {
+                        <Input.Password maxLength={16} onChange={event => {
                             setPassword(event.target.value)
                             repeatPassword === event.target.value ? setValidRepeat(true) : setValidRepeat(false)
                             event.target.value.match(validRegexPassword)
@@ -116,7 +116,7 @@ const RegistrationPage = () => {
                             required: true,
                             message: "Повторите пароль"
                         }]}>
-                        <Input.Password onChange={(event) => {
+                        <Input.Password maxLength={16} onChange={(event) => {
                             setRepeatPassword(event.target.value)
                             password === event.target.value ? setValidRepeat(true) : setValidRepeat(false)
                         }}/>

@@ -21,11 +21,11 @@ const AccountPagesMenu = () => {
             label: <NavLink to="/account/orders">Мои заказы</NavLink>,
             key: 'orders',
         },
-        {
-            icon: <ShoppingOutlined/>,
-            label: <NavLink to="/account/purchases">Мои покупки</NavLink>,
-            key: 'purchases',
-        },
+        // {
+        //     icon: <ShoppingOutlined/>,
+        //     label: <NavLink to="/account/purchases">Мои покупки</NavLink>,
+        //     key: 'purchases',
+        // },
         {
             icon: <WalletOutlined/>,
             label:<NavLink to="/account/bonuses">Мои бонусы</NavLink>,

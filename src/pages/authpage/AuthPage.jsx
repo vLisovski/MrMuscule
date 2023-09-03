@@ -11,6 +11,7 @@ const onFinishFailed = (errorInfo) => {
 }
 
 const AuthPage = (props) => {
+    let [remember, setRemember] = useState("false")
     let [validEmail, setValidEmail] = useState(false);
     let validRegexEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     let [email, setEmail] = useState("");
@@ -26,11 +27,22 @@ const AuthPage = (props) => {
 
     let onFinish = (values) => {
         let credentials = {
-            email: values.email,
-            password: values.password
+            email: email,
+            password: password
         }
         authOrRegister.authentication(credentials).then(
             response => {
+                console.log("REMEMBER"+remember)
+                if(remember==="true"){
+                    localStorageWorker.save("remember", remember)
+                    localStorageWorker.save("email", email)
+                    localStorageWorker.save("password", password)
+                }else{
+                    console.log("ELSE REMEMBER BLERT")
+                    localStorageWorker.save("remember", remember)
+                    localStorageWorker.save("email", "")
+                    localStorageWorker.save("password", "")
+                }
                 let token = response.data.token;
                 localStorageWorker.save("token", token);
                 usersApiWorker.getIdByToken(token).then(
@@ -72,6 +84,30 @@ const AuthPage = (props) => {
         } else {
             setRgba("rgba(200, 0, 0, 0.2)")
         }
+        setPassword(localStorageWorker.get("password"))
+        console.log("SETPASSWORD" + password)
+        setEmail(localStorageWorker.get("email"))
+        console.log("SETEMAIL" + email)
+    }, []);
+
+    useEffect(()=>{
+        password.match(validRegexPassword)
+            ? setValidPassword(true)
+            : setValidPassword(false)
+    },[password])
+
+    useEffect(()=>{
+        email.match(validRegexEmail)
+            ? setValidEmail(true)
+            : setValidEmail(false)
+    },[email])
+
+    useEffect(() => {
+        if (validPassword && validEmail) {
+            setRgba("rgba(0,0,200,0.2)")
+        } else {
+            setRgba("rgba(200, 0, 0, 0.2)")
+        }
     }, [validEmail, validPassword]);
 
     return (
@@ -101,20 +137,22 @@ const AuthPage = (props) => {
                           marginBottom: "10px"
                       }}
                       initialValues={{
-                          remember: true
+                          email: localStorageWorker.get("email"),
+                          password: localStorageWorker.get("password")
                       }}
                       onFinish={onFinish}
                       onFinishFailed={onFinishFailed}
-                      autoComplete="off">
+                      autoComplete={remember}>
                     <Form.Item
                         label="Почта"
+                        valuePropName="mail"
                         name="email"
                         style={{marginBottom: "2px"}}
                         rules={[{
                             required: true,
                             message: 'Введите email'
                         }]}>
-                        <Input status={validEmail} onChange={event => {
+                        <Input status={validEmail} value={email} onChange={event => {
                             setEmail(event.target.value)
                             event.target.value.match(validRegexEmail)
                                 ? setValidEmail(true)
@@ -130,13 +168,16 @@ const AuthPage = (props) => {
                         </Col>}
                     <Form.Item
                         label="Пароль"
+                        valuePropName="paswrd"
                         name="password"
                         style={{marginBottom: "2px"}}
                         rules={[{
                             required: true,
                             message: "Введите пароль"
                         }]}>
-                        <Input.Password status={validPassword}
+                        <Input.Password maxLength={16}
+                                        value={password}
+                                        status={validPassword}
                             onChange={event => {
                             setPassword(event.target.value)
                             event.target.value.match(validRegexPassword)
@@ -159,7 +200,10 @@ const AuthPage = (props) => {
                             offset: 8,
                             span: 16
                         }}>
-                        <Checkbox>Запомнить меня</Checkbox>
+                        <Checkbox onClick={()=>{
+                            remember==="true" ? setRemember("false") : setRemember("true")
+                            console.log(remember)
+                        }}>Запомнить меня</Checkbox>
                     </Form.Item>
                     {validEmail && validPassword
                         ?

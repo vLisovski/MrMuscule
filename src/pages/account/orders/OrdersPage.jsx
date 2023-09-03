@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Col, List, Space} from "antd";
+import {List, Space} from "antd";
 import OrderApi from "../../../api/order/OrderApi";
 import LocalStorageWorker from "../../../storage/LocalStorageWorker";
 import Card from "antd/es/card/Card";
@@ -12,7 +12,6 @@ const OrdersPage = () => {
     let local = new LocalStorageWorker()
 
     useEffect(()=>{
-        console.log("ORDERSPAGELOADED")
         orderApi.getOrdersByUserId(local.get("userid"), local.get("token"))
             .then((response) => {
                 console.log("ORDERS RESPONSE"+response.data)
@@ -45,11 +44,15 @@ const OrdersPage = () => {
                             <p>Дата заказа: {order.date}</p>
                             <p>Стоимость заказа: {order.cost} руб.</p>
                         </>}>
+
+                                <small style={{color: "blue"}}>Список купленных товаров: </small>
+
                             {
                             order.productList.map((product)=>{
-                                return <Space>{product.name}</Space>
+                                return <p>{product.name}</p>
                             })
-                        }</Card>
+                            }
+                        </Card>
                     </List.Item>
                 )}
             />
