@@ -27,6 +27,21 @@ const InventoryPage = (props) => {
     let navigation = useNavigate()
 
     useEffect(() => {
+        if(localStorageWorker.get("menu")==null){
+            localStorageWorker.save("menu","inventory")
+        }
+        if(localStorageWorker.get("cartcounter")==null){
+            localStorageWorker.save("cartcounter",0)
+        }
+        if(localStorageWorker.get("cartcount")==null){
+            localStorageWorker.save("cartcount",0)
+        }
+        if(localStorageWorker.get("location")==null){
+            localStorageWorker.save("location",window.location.href)
+        }
+        if(localStorageWorker.get("cart")==null){
+            localStorageWorker.save("cart",[])
+        }
         props.setCurrent("inventory")
         shopPageApi.getTotalInventory().then(response => {
             setTotal(response.data)

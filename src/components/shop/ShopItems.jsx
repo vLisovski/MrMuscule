@@ -42,21 +42,47 @@ const ShopItems = (props) => {
                 }
             }
         } else {
+            console.log("ELSEELSEELSELSELSELSLELE")
+            console.log("FAVORITE"+props.favorite)
             if (localStorageWorker.get("cart").split(",").includes(`${item.id}`)) {
-                actions = [<>Товар в корзине</>]
+                if(props.favorite[0]==null){
+                    actions = [<>Товар в корзине</>]
+                }else{
+                    actions = [<>Товар в корзине</>, <StarOutlined style={{color: "black"}} onClick={() => {
+                        addToFavorite(props, item.id)
+                    }} key="favorite"/>]
+                }
+
             } else {
-                actions = [<ShoppingCartOutlined onClick={() => {
+                if(props.favorite[0]==null){
+                    actions = [<ShoppingCartOutlined onClick={() => {
 
-                    let cart = localStorageWorker.get("cart").split(",")
+                        let cart = localStorageWorker.get("cart").split(",")
 
-                    if (cart[0] === '') {
-                        cart[0] = item.id
-                    } else {
-                        cart.push(item.id)
-                    }
-                    localStorageWorker.save("cart", cart)
-                    props.setCart(cart)
-                }} key="cart"/>]
+                        if (cart[0] === '') {
+                            cart[0] = item.id
+                        } else {
+                            cart.push(item.id)
+                        }
+                        localStorageWorker.save("cart", cart)
+                        props.setCart(cart)
+                    }} key="cart"/>]
+                }else{
+                    actions = [<ShoppingCartOutlined onClick={() => {
+
+                        let cart = localStorageWorker.get("cart").split(",")
+
+                        if (cart[0] === '') {
+                            cart[0] = item.id
+                        } else {
+                            cart.push(item.id)
+                        }
+                        localStorageWorker.save("cart", cart)
+                        props.setCart(cart)
+                    }} key="cart"/>, <StarOutlined style={{color: "black"}} onClick={() => {
+                        addToFavorite(props, item.id)
+                    }} key="favorite"/>]
+                }
             }
         }
         return actions
