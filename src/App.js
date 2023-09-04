@@ -23,7 +23,7 @@ function App() {
     }
 
     useEffect(()=>{
-        setCartCount(local.get("cartcount"))
+        setCartCount(local.get("cart").split(",").length)
     },[])
 
     return (

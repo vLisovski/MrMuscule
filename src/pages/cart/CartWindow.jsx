@@ -48,13 +48,11 @@ const CartWindow = (props) => {
                 })
                     .then(response => {
                         setData(response.data)
-                        console.log("RESPONSE" + response.data)
                     })
                     .catch(error => {
                         console.log(error)
                     });
             })
-
        callBackFromDeleteClick()
 
     }, [])
@@ -83,7 +81,7 @@ const CartWindow = (props) => {
             {
                 data.length > 0
                     ?
-                    <Cart updateCartCounter={props.updateCartCounter}
+                    <Cart cartCount={props.cartCount} updateCartCounter={props.updateCartCounter}
                           data={data}/>
                     : <></>
             }

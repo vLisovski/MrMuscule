@@ -49,7 +49,7 @@ const AuthPage = (props) => {
                     response => {
                         let userid = response.data;
                         localStorageWorker.save("userid", userid);
-                        if(localStorageWorker.get("cart").split(",").length>0){
+                        if(localStorageWorker.get("cart").length>0){
 
                             cartApi.clearCart(userid, token)
                                 .catch(error => console.log(error))
@@ -59,7 +59,6 @@ const AuthPage = (props) => {
                                 carts: localStorageWorker.get("cart").split(",")
                             }, localStorageWorker.get("token"))
                                 .catch(error => console.log(error))
-
                         }
                         navigate(localStorageWorker.get("location").substr(21));
                     }

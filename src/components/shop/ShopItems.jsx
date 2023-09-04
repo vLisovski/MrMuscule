@@ -15,7 +15,6 @@ const ShopItems = (props) => {
     const pushAction = (item) => {
         let actions
         if (localStorageWorker.get("token") != null && props.favorite.length > 0) {
-            console.log("IFIFIFFIIFFIFIFIFIF")
             if (props.favorite.includes(item.id)) {
                 if (props.cart.includes(item.id)) {
                     actions = [<>Товар в корзине</>, <StarOutlined style={{color: "yellow"}} onClick={() => {
@@ -42,8 +41,6 @@ const ShopItems = (props) => {
                 }
             }
         } else {
-            console.log("ELSEELSEELSELSELSELSLELE")
-            console.log("FAVORITE"+props.favorite)
             if (localStorageWorker.get("cart").split(",").includes(`${item.id}`)) {
                 if(props.favorite[0]==null){
                     actions = [<>Товар в корзине</>]

@@ -28,10 +28,17 @@ const Cart = (props) => {
                            for (let i = 0; i < data2.length; i++) {
                                data3.push(data2[i].id)
                            }
-                           local.save("cart", data3)
-                           props.updateCartCounter(data.length-1)
-                           cartApi.deleteProduct(item.id, local.get("token"))
-                               .then(()=>alert("товар " + item.name +" удален из корзины"))
+                           local.save("cart", data2)
+                           props.updateCartCounter(data2.length)
+                           let deletedItem = {
+                               userId: local.get("userid"),
+                               productId: item.id
+                           }
+                           cartApi.deleteProduct(deletedItem, local.get("token"))
+                               .then(()=>{
+                                   console.log("товар " + item.name +" удален из корзины")
+                                   //props.updateCartCounter(props.cartCount-1)
+                               })
                                .catch(error => {
                                    //local.save("location", window.location.href)
                                    //navigation("/authorization")
