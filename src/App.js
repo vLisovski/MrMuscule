@@ -11,10 +11,12 @@ import AccountPage from "./pages/account/AccountPage";
 import RedirectPage from "./pages/shop/RedirectPage";
 import {useEffect, useState} from "react";
 import LocalStorageWorker from "./storage/LocalStorageWorker";
+import TargetOfferPage from "./pages/shop/TargetOfferPage";
 
 function App() {
 
     let local = new LocalStorageWorker()
+    let [cart, setCart] = useState([])
     let [cartCount, setCartCount] = useState()
     let [current, setCurrent] = useState()
 
@@ -23,17 +25,41 @@ function App() {
     }
 
     useEffect(()=>{
+        if(local.get("menu")==null){
+            local.save("menu","target")
+        }
+        if(local.get("cartcounter")==null){
+            local.save("cartcounter",0)
+        }
+        if(local.get("cartcount")==null){
+            local.save("cartcount",0)
+        }
+        if(local.get("location")==null){
+            local.save("location",window.location.href)
+        }
+        if(local.get("cart")==null){
+            local.save("cart",[])
+        }
         setCartCount(local.get("cart").split(",").length)
     },[])
+
+    useEffect(() => {
+        console.log("CART" + cart)
+        local.save("cart", cart)
+        if(cart[0]!==''){
+            updateCartCounter(cart.length)
+        }
+    }, [cart])
 
     return (
         <>
             <Header current={current} cartCount={cartCount}/>
             <Routes>
                 <Route path="/" element={<RedirectPage/>}/>
-                <Route path="/inventory" element={<InventoryPage setCurrent={setCurrent} updateCartCounter={updateCartCounter}/>}/>
-                <Route path="/clothes" element={<ClothesPage setCurrent={setCurrent} updateCartCounter={updateCartCounter}/>}/>
-                <Route path="/food" element={<FoodPage setCurrent={setCurrent} updateCartCounter={updateCartCounter}/>}/>
+                <Route path="/inventory" element={<InventoryPage cart={cart} setCart={setCart} setCurrent={setCurrent} updateCartCounter={updateCartCounter}/>}/>
+                <Route path="/clothes" element={<ClothesPage cart={cart} setCart={setCart} setCurrent={setCurrent} updateCartCounter={updateCartCounter}/>}/>
+                <Route path="/food" element={<FoodPage cart={cart} setCart={setCart} setCurrent={setCurrent} updateCartCounter={updateCartCounter}/>}/>
+                <Route path="/target" element={<TargetOfferPage cart={cart} setCart={setCart} setCurrent={setCurrent} updateCartCounter={updateCartCounter}/>}/>
                 <Route path="/cart" element={<CartWindow setCurrent={setCurrent} cartCount={cartCount} updateCartCounter={updateCartCounter}/>}/>
                 <Route path="/account/*" element={<AccountPage/>}/>
                 <Route path="/registration" element={<RegistrationPage setCurrent={setCurrent}/>}/>

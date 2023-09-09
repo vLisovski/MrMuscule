@@ -22,23 +22,28 @@ class ShopPageApi {
         return await this.#axios.get(`/getAll/clothes?limit=${limit}&offset=${offset}`);
     }
 
-    async getTotalInventory(){
+    async getTotalInventory() {
         return await this.#axios.get("/getTotal/inventory");
     }
 
-    async getTotalFood(){
+    async getTotalFood() {
         return await this.#axios.get("/getTotal/food");
     }
 
-    async getTotalClothes(){
+    async getTotalClothes() {
         return await this.#axios.get("/getTotal/clothes");
     }
 
-    async getAllByProductsIds(productsIds){
-
-        console.log("PRODUCTS IDS " + productsIds)
-
+    async getAllByProductsIds(productsIds) {
         return await this.#axios.post(`/getAllByIdList`, productsIds)
+    }
+
+    async getTotalByTag(tag1,tag2) {
+        return await this.#axios.get(`/getTotal/target?tag1=${tag1}&tag2=${tag2}`)
+    }
+
+    async getAllByTag(tag1,tag2,limit,offset) {
+        return await this.#axios.get(`/getAll/target?tag1=${tag1}&tag2=${tag2}&limit=${limit}&offset=${offset}`)
     }
 }
 

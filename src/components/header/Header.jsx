@@ -1,9 +1,7 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {Menu, Space} from 'antd';
-import {useState} from 'react';
 import {HomeOutlined, ShoppingCartOutlined, UserOutlined} from "@ant-design/icons";
 import {NavLink} from "react-router-dom"
-import LocalStorageWorker from "../../storage/LocalStorageWorker";
 
 const IconText = ({ icon, text }) => (
     <>
@@ -13,8 +11,6 @@ const IconText = ({ icon, text }) => (
 );
 
 const Header = (props) => {
-    // const localStorageWorker = new LocalStorageWorker();
-    // let [current, setCurrent] = useState(localStorageWorker.get("menu"));
 
     const items = [
         {
@@ -37,6 +33,10 @@ const Header = (props) => {
             disabled: false
         },
         {
+            label: <NavLink to="/target"><Space style={{fontSize: "larger"}}>Наборы</Space></NavLink>,
+            key: 'target',
+        },
+        {
             icon:<NavLink to="/account/info"><UserOutlined style={{ fontSize: '21px', color: '#000000' }}/></NavLink>,
             key: 'account',
             style: { float: 'right',marginTop: "2px"},
@@ -54,16 +54,6 @@ const Header = (props) => {
             style: { float: 'right', marginTop: "2px"},
         },
     ];
-
-    // const[currentPlace,setCurrentPlace] = useState(navigate.options.currentLocation);
-    // const onClick = (e) => {
-    //     localStorageWorker.save("menu",e.key)
-    //     setCurrent(localStorageWorker.get("menu"))
-    // };
-
-    // useEffect(() => {
-    //    setCurrent(localStorageWorker.get("menu"))
-    // },[window.location.href]);
 
     return (
         <Menu style={{ display: 'block',

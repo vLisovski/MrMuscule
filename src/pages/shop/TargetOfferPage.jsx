@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from 'react';
-import Footer from "../../components/footer/Footer";
-import {Alert, Col, Dropdown, Pagination, Space, Spin} from "antd";
-import ShopPageApi from "../../api/shop/ShopPageApi";
-import {DownOutlined} from "@ant-design/icons";
-import ShopItems from "../../components/shop/ShopItems";
 import CartApi from "../../api/cart/CartApi";
 import UsersApiWorker from "../../api/user/UsersApiWorker";
+import ShopPageApi from "../../api/shop/ShopPageApi";
 import LocalStorageWorker from "../../storage/LocalStorageWorker";
 import {useNavigate} from "react-router-dom";
+import {Alert, Col, Dropdown, Pagination, Space, Spin, Radio, Button} from "antd";
+import {DownOutlined} from "@ant-design/icons";
+import ShopItems from "../../components/shop/ShopItems";
+import Footer from "../../components/footer/Footer";
 
-const FoodPage = (props) => {
+const TargetOfferPage = (props) => {
 
     let cartApi = new CartApi()
     let userApi = new UsersApiWorker()
@@ -22,32 +22,60 @@ const FoodPage = (props) => {
     let [currentPage, setCurrentPage] = useState(1)
     let [total, setTotal] = useState(0)
 
+    let [gender, setGender] = useState("male")
+    let [type, setType] = useState("cardio")
+    let [isWinter, setIsWinter] = useState(false)
+
     let [favorite, setFavorite] = useState([])
     let navigation = useNavigate()
 
-    useEffect(() => {
-        props.setCurrent("food")
-        shopPageApi.getTotalFood().then(response => {
+    const getProductsByTag = () => {
+
+        let winter
+
+        if (isWinter) {
+            winter = "winter"
+        } else {
+            winter = ""
+        }
+
+        let tag1
+
+        if (type === "pump") {
+            tag1 = type + "," + gender
+        } else {
+            tag1 = type + "," + gender
+        }
+
+        if (winter === "winter") {
+            tag1 = tag1 + "," + winter
+        }
+
+        let tag2 = type
+
+        console.log("TAG1 " + tag1)
+        console.log("TAG2 " + tag2)
+
+        shopPageApi.getTotalByTag(tag1, tag2).then(response => {
+            console.log("TOTAL" + response.data)
             setTotal(response.data)
             if (localStorageWorker.get("token") != null && localStorageWorker.get("userid") != null) {
                 userApi.getFavoritesIds(localStorageWorker.get("userid"), response.data, 0, localStorageWorker.get("token"))
                     .then(response => {
                         setFavorite(response.data)
-
-                    }).catch(
-                    () => {
+                    }).catch(() => {
                         setFavorite([])
                         setLoading(false)
                     }
                 )
-                cartApi.getProductIds(localStorageWorker.get("userid"),localStorageWorker.get("token"))
-                    .then(response=>{
+                cartApi.getProductIds(localStorageWorker.get("userid"), localStorageWorker.get("token"))
+                    .then(response => {
                         props.setCart(response.data)
                         console.log("CART" + props.cart)
                         localStorageWorker.save("cart", props.cart)
                         setLoading(false)
                     })
-                    .catch(error=>{
+                    .catch(error => {
                         console.log(error)
                         props.setCart(localStorageWorker.get("cart").split(","))
                         setLoading(false)
@@ -59,7 +87,7 @@ const FoodPage = (props) => {
             }
         )
 
-        shopPageApi.getAllFood(limit, offset).then(response => {
+        shopPageApi.getAllByTag(tag1, tag2, limit, offset).then(response => {
             setCards(response.data)
             setLoading(false)
         }).catch(
@@ -67,7 +95,11 @@ const FoodPage = (props) => {
                 alert(error)
             }
         )
-    }, [limit, offset])
+    }
+
+    useEffect(() => {
+        props.setCurrent("target")
+    }, [])
 
     const items = [
         {
@@ -84,14 +116,49 @@ const FoodPage = (props) => {
         },
     ];
 
+    const itemsType = [
+        {
+            label: "Кардио",
+            key: 'cardio'
+        },
+        {
+            label: "Набор массы",
+            key: 'pump'
+        }
+    ];
+
+    const itemsGender = [
+        {
+            label: "Мужской",
+            key: 'male'
+        },
+        {
+            label: "Женский",
+            key: 'female'
+        }
+    ];
+
     const onClick = ({key}) => {
         setLimit(key)
+    };
+
+    const onClickGender = ({key}) => {
+        setGender(key)
+    };
+
+    const onClickType = ({key}) => {
+        setType(key)
+        console.log(key)
     };
 
     const onChange = (page) => {
         setCurrentPage(page)
         setOffset(limit * (page - 1))
     }
+
+    useEffect(() => {
+        getProductsByTag()
+    }, [limit, offset])
 
     return (
         <>
@@ -109,21 +176,69 @@ const FoodPage = (props) => {
                     alignItems: "stretch",
                     marginLeft: "5%"
                 }}>
-                    <Dropdown
-                        menu={{
-                            items,
-                            onClick,
-                        }}
-                    >
+                    <Dropdown destroyPopupOnHide={true} menu={{
+                        items: items,
+                        onClick: onClick
+                    }}>
                         <a onClick={(e) => e.preventDefault()}>
                             <Space>
-                                Товаров на странице:
+                                Товаров на странице
                                 <DownOutlined/>
                             </Space>
                         </a>
                     </Dropdown>
 
+                    <Dropdown menu={{
+                        items: itemsType,
+                        onClick: onClickType
+                    }}>
+                        <a onClick={(e) => e.preventDefault()}>
+                            <Space>
+                                Тип тренировки
+                                <DownOutlined/>
+                            </Space>
+                        </a>
+                    </Dropdown>
+
+                    <Dropdown destroyPopupOnHide={true} menu={{
+                        items: itemsGender,
+                        onClick: onClickGender
+                    }}>
+                        <a onClick={(e) => e.preventDefault()}>
+                            <Space>
+                                Пол
+                                <DownOutlined/>
+                            </Space>
+                        </a>
+                    </Dropdown>
+
+                    {
+                        type === "cardio"
+                            ?
+                            <Radio checked={isWinter} onClick={() => {
+                                isWinter ? setIsWinter(false) : setIsWinter(true)
+                            }}>Зима</Radio>
+                            :
+                            <></>
+                    }
+                    <Button onClick={getProductsByTag}>Найти товары</Button>
                 </Space>
+
+                <Space style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignContent: "start",
+                    alignItems: "stretch",
+                    marginLeft: "5%"
+                }}>
+                    {
+                        type==="cardio" ? <a>Выбранный тип тренировки: кардио</a> : <a>Выбранный тип тренировки: набор мышечной массы</a>
+                    }
+                    {
+                        gender==="male" ? <a>Выбранный пол: мужской</a> : <a>Выбранный пол: женский</a>
+                    }
+                </Space>
+
                 {
                     loading
                         ?
@@ -138,8 +253,8 @@ const FoodPage = (props) => {
                                  span={24}>
                                 <Spin style={{marginLeft: '10px', marginTop: '10px'}}>
                                     <Alert
-                                        message="Грузим питание"
-                                        description="Длительность загрузки зависит от Вашей сети"
+                                        message="Грузим товары"
+                                        description="Скорость загрузки зависит от Вашей сети"
                                         type="info"
                                         style={{
                                             padding: '50px',
@@ -193,6 +308,7 @@ const FoodPage = (props) => {
             {!loading ? <Footer/> : <div/>}
         </>
     );
+
 };
 
-export default FoodPage;
+export default TargetOfferPage;

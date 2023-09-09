@@ -22,26 +22,11 @@ const InventoryPage = (props) => {
     let [offset, setOffset] = useState(0)
     let [currentPage, setCurrentPage] = useState(1)
     let [total, setTotal] = useState(0)
-    let [cart, setCart] = useState([])
+
     let [favorite, setFavorite] = useState([])
     let navigation = useNavigate()
 
     useEffect(() => {
-        if(localStorageWorker.get("menu")==null){
-            localStorageWorker.save("menu","inventory")
-        }
-        if(localStorageWorker.get("cartcounter")==null){
-            localStorageWorker.save("cartcounter",0)
-        }
-        if(localStorageWorker.get("cartcount")==null){
-            localStorageWorker.save("cartcount",0)
-        }
-        if(localStorageWorker.get("location")==null){
-            localStorageWorker.save("location",window.location.href)
-        }
-        if(localStorageWorker.get("cart")==null){
-            localStorageWorker.save("cart",[])
-        }
         props.setCurrent("inventory")
         shopPageApi.getTotalInventory().then(response => {
             setTotal(response.data)
@@ -58,14 +43,14 @@ const InventoryPage = (props) => {
                 )
                 cartApi.getProductIds(localStorageWorker.get("userid"),localStorageWorker.get("token"))
                     .then(response=>{
-                        setCart(response.data)
-                        console.log("CART" + cart)
-                        localStorageWorker.save("cart", cart)
+                        props.setCart(response.data)
+                        console.log("CART" + props.cart)
+                        localStorageWorker.save("cart", props.cart)
                         setLoading(false)
                     })
                     .catch(error=>{
                         console.log(error)
-                        setCart(localStorageWorker.get("cart").split(","))
+                        props.setCart(localStorageWorker.get("cart").split(","))
                         setLoading(false)
                     })
             }
@@ -84,17 +69,6 @@ const InventoryPage = (props) => {
             }
         )
     }, [limit, offset])
-
-    useEffect(() => {
-        console.log("CART" + cart)
-        if(cart[0]!==''){
-            props.updateCartCounter(cart.length)
-        }
-    }, [cart])
-
-    useEffect(() => {
-        console.log("FAVORITE " + favorite)
-    }, [favorite])
 
     const items = [
         {
@@ -149,7 +123,6 @@ const InventoryPage = (props) => {
                             </Space>
                         </a>
                     </Dropdown>
-
                 </Space>
                 {
                     loading
@@ -193,9 +166,9 @@ const InventoryPage = (props) => {
                                 marginLeft: "10%"
                             }}
                                  span={20}>
-                                <ShopItems cart={cart}
+                                <ShopItems cart={props.cart}
                                            favorite={favorite}
-                                           setCart={setCart}
+                                           setCart={props.setCart}
                                            setFavorite={setFavorite}
                                            cards={cards}
                                            navigation={navigation}
