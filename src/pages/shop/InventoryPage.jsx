@@ -27,6 +27,7 @@ const InventoryPage = (props) => {
     let navigation = useNavigate()
 
     useEffect(() => {
+        localStorageWorker.save("location",window.location.href)
         props.setCurrent("inventory")
         shopPageApi.getTotalInventory().then(response => {
             setTotal(response.data)
@@ -34,7 +35,6 @@ const InventoryPage = (props) => {
                 userApi.getFavoritesIds(localStorageWorker.get("userid"), response.data, 0, localStorageWorker.get("token"))
                     .then(response => {
                         setFavorite(response.data)
-
                     }).catch(
                     () => {
                         setFavorite([])

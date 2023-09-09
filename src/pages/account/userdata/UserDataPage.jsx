@@ -5,11 +5,13 @@ import UsersApiWorker from "../../../api/user/UsersApiWorker";
 import LocalStorageWorker from "../../../storage/LocalStorageWorker";
 import {useNavigate} from "react-router-dom";
 
-const UserDataPage = () => {
+const UserDataPage = (props) => {
 
     let userApi = new UsersApiWorker()
     let navigate = useNavigate()
     let [loading,setLoading] = useState(true)
+    let local = new LocalStorageWorker()
+
     let [user, setUser] = useState({
         phoneNumber: "",
         email: "",
@@ -17,12 +19,14 @@ const UserDataPage = () => {
         avatarPath: "",
         bonuses: 0
     })
-    let local = new LocalStorageWorker()
 
     useEffect(() => {
+
+        props.setCurrentLeft("info")
         if (local.get("token") !== null) {
             userApi.getUserInfo(local.get("userid"), local.get("token"))
                 .then(response => {
+                    local.save("location",window.location.href)
                     setUser(response.data)
                     setLoading(false)
                 })

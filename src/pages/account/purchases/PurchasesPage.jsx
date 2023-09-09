@@ -8,7 +8,7 @@ import Meta from "antd/es/card/Meta";
 import {DownOutlined} from "@ant-design/icons";
 import {useNavigate} from "react-router-dom";
 
-const PurchasesPage = () => {
+const PurchasesPage = (props) => {
 
     let userApi = new UsersApiWorker()
     let local = new LocalStorageWorker()
@@ -21,8 +21,10 @@ const PurchasesPage = () => {
     let navigation = useNavigate()
     useEffect(() => {
 
+        props.setCurrentLeft("purchases")
         userApi.getTotalPurchases(local.get("userid"), local.get("token"))
             .then(response => {
+                local.save("location",window.location.href)
                 setTotal(response.data)
             })
             .catch(error => {

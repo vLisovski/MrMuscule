@@ -26,6 +26,7 @@ const FoodPage = (props) => {
     let navigation = useNavigate()
 
     useEffect(() => {
+        localStorageWorker.save("location",window.location.href)
         props.setCurrent("food")
         shopPageApi.getTotalFood().then(response => {
             setTotal(response.data)

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
     CheckOutlined,
     HeartOutlined,
@@ -9,7 +9,7 @@ import {
 import {Menu} from "antd";
 import {NavLink} from "react-router-dom";
 
-const AccountPagesMenu = () => {
+const AccountPagesMenu = (props) => {
     const items = [
         {
             icon: <IdcardOutlined/>,
@@ -38,15 +38,14 @@ const AccountPagesMenu = () => {
         }
     ];
 
-    const [current, setCurrent] = useState('info');
     const onClick = (e) => {
-        setCurrent(e.key);
+        props.setCurrentLeft(e.key);
     };
 
     return (
             <Menu style={{display: 'block', marginTop: '30px',fontSize: "medium"}}
                   onClick={onClick}
-                  selectedKeys={[current]}
+                  selectedKeys={props.currentLeft}
                   theme="light"
                   mode="vertical"
                   items={items}/>

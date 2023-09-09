@@ -60,8 +60,8 @@ function App() {
                 <Route path="/clothes" element={<ClothesPage cart={cart} setCart={setCart} setCurrent={setCurrent} updateCartCounter={updateCartCounter}/>}/>
                 <Route path="/food" element={<FoodPage cart={cart} setCart={setCart} setCurrent={setCurrent} updateCartCounter={updateCartCounter}/>}/>
                 <Route path="/target" element={<TargetOfferPage cart={cart} setCart={setCart} setCurrent={setCurrent} updateCartCounter={updateCartCounter}/>}/>
-                <Route path="/cart" element={<CartWindow setCurrent={setCurrent} cartCount={cartCount} updateCartCounter={updateCartCounter}/>}/>
-                <Route path="/account/*" element={<AccountPage/>}/>
+                <Route path="/cart" element={<CartWindow cart={cart} setCart={setCart} setCurrent={setCurrent} cartCount={cartCount} updateCartCounter={updateCartCounter}/>}/>
+                <Route path="/account/*" element={<AccountPage setCurrent={setCurrent}/>}/>
                 <Route path="/registration" element={<RegistrationPage setCurrent={setCurrent}/>}/>
                 <Route path="/authorization" element={<AuthPage setCurrent={setCurrent} />}/>
             </Routes>

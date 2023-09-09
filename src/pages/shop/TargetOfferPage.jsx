@@ -97,10 +97,6 @@ const TargetOfferPage = (props) => {
         )
     }
 
-    useEffect(() => {
-        props.setCurrent("target")
-    }, [])
-
     const items = [
         {
             label: "3",
@@ -155,6 +151,11 @@ const TargetOfferPage = (props) => {
         setCurrentPage(page)
         setOffset(limit * (page - 1))
     }
+
+    useEffect(() => {
+        localStorageWorker.save("location",window.location.href)
+        props.setCurrent("target")
+    }, [])
 
     useEffect(() => {
         getProductsByTag()

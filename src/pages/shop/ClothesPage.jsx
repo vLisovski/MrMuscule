@@ -26,6 +26,7 @@ const ClothesPage = (props) => {
     let navigation = useNavigate()
 
     useEffect(() => {
+        localStorageWorker.save("location",window.location.href)
         props.setCurrent("clothes")
         shopPageApi.getTotalClothes().then(response => {
             setTotal(response.data)

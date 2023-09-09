@@ -32,21 +32,19 @@ const AuthPage = (props) => {
         }
         authOrRegister.authentication(credentials).then(
             response => {
-                console.log("REMEMBER"+remember)
                 if(remember==="true"){
                     localStorageWorker.save("remember", remember)
                     localStorageWorker.save("email", email)
                     localStorageWorker.save("password", password)
                 }else{
-                    console.log("ELSE REMEMBER BLERT")
                     localStorageWorker.save("remember", remember)
                     localStorageWorker.save("email", "")
                     localStorageWorker.save("password", "")
                 }
                 let token = response.data.token;
                 localStorageWorker.save("token", token);
-                usersApiWorker.getIdByToken(token).then(
-                    response => {
+                usersApiWorker.getIdByToken(token)
+                    .then(response => {
                         let userid = response.data;
                         localStorageWorker.save("userid", userid);
                         if(localStorageWorker.get("cart").length>0){
@@ -64,7 +62,6 @@ const AuthPage = (props) => {
                     }
                 ).catch(
                     error => {
-                        alert("Неверный логин или пароль!");
                         console.log(error)
                     }
                 )
@@ -84,9 +81,7 @@ const AuthPage = (props) => {
             setRgba("rgba(200, 0, 0, 0.2)")
         }
         setPassword(localStorageWorker.get("password"))
-        console.log("SETPASSWORD" + password)
         setEmail(localStorageWorker.get("email"))
-        console.log("SETEMAIL" + email)
     }, []);
 
     useEffect(()=>{
@@ -220,7 +215,6 @@ const AuthPage = (props) => {
                 </Form>
             </Col>
         </>
-
     );
 };
 

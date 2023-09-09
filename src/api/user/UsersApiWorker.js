@@ -98,7 +98,7 @@ class UsersApiWorker {
     }
 
     async getTotalFavorites(userId, token){
-        await this.#axios.get(`/getTotalFavorite?userId=${userId}`,{
+       return await this.#axios.get(`/getTotalFavorite?userId=${userId}`,{
             headers: {
                 "Authorization": "Bearer " + token
             }

@@ -9,12 +9,15 @@ import OrdersPage from "./orders/OrdersPage";
 import BonusesPage from "./bonuses/BonusesPage";
 import LocalStorageWorker from "../../storage/LocalStorageWorker";
 
-const AccountPage = () => {
+const AccountPage = (props) => {
+
     let [isAuth, setAuth] = useState(false)
     let localStorageWorker = new LocalStorageWorker();
+    let [currentLeft, setCurrentLeft] = useState()
     let navigate = useNavigate();
 
     useEffect(() => {
+        props.setCurrent("account")
         let token = localStorageWorker.get("token");
         let userid = localStorageWorker.get("userid");
 
@@ -25,6 +28,7 @@ const AccountPage = () => {
             setAuth(false);
             navigate("/authorization")
         }
+
     }, []);
 
     return (
@@ -34,17 +38,18 @@ const AccountPage = () => {
                     ?
                     <Row justify="start">
                         <Col span={4}>
-                            <AccountPagesMenu/>
+                            <AccountPagesMenu setCurrentLeft={setCurrentLeft} currentLeft={currentLeft}/>
                         </Col>
                         <Routes>
-                            <Route path="/info" element={<UserDataPage/>}/>
-                            <Route path="/favorite" element={<FavoritePage/>}/>
-                            {/*<Route path="/purchases" element={<PurchasesPage/>}/>*/}
-                            <Route path="/orders" element={<OrdersPage/>}/>
-                            <Route path="/bonuses" element={<BonusesPage/>}/>
+                            <Route path="/info" element={<UserDataPage setCurrentLeft={setCurrentLeft}/>}/>
+                            <Route path="/favorite" element={<FavoritePage setCurrentLeft={setCurrentLeft}/>}/>
+                            {/*<Route path="/purchases" element={<PurchasesPage setCurrent={props.setCurrent} setCurrentLeft={setCurrentLeft}/>}/>*/}
+                            <Route path="/orders" element={<OrdersPage setCurrentLeft={setCurrentLeft}/>}/>
+                            <Route path="/bonuses" element={<BonusesPage setCurrentLeft={setCurrentLeft}/>}/>
                         </Routes>
                     </Row>
-                    :<p/>
+                    :
+                    <p/>
             }
         </>
     );

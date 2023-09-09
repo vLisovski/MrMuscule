@@ -1,4 +1,4 @@
-import {Card, Image, Skeleton} from "antd";
+import {Card, Col, Image, Skeleton} from "antd";
 import Meta from "antd/es/card/Meta";
 import {ShoppingCartOutlined, StarOutlined} from "@ant-design/icons";
 import LocalStorageWorker from "../../storage/LocalStorageWorker";
@@ -96,7 +96,7 @@ const ShopItems = (props) => {
                 background: 'white',
                 marginTop: '30px',
                 marginLeft: '8px',
-                width: "250px",
+                width: "250px"
             }}
             actions={pushAction(item)}
             size={"default"}
@@ -113,11 +113,13 @@ const ShopItems = (props) => {
                         alignContent: "flex-start"
                     }}
                     title={item.name}
-                    description={<>
+                    description={<><Col style={{height:"100px", overflowY: "scroll"}} span={24}>
                         <p style={{color: "black"}}>{item.description}</p>
+                    </Col>
                         <p style={{color: "blue"}}>{item.price}₽</p>
                         <p style={{color: "green"}}>+{item.bonuses}Б</p>
-                    </>}/>
+                    </>
+                    }/>
             </Skeleton>
         </Card>)
     })

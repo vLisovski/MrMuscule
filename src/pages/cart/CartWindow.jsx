@@ -30,6 +30,13 @@ const CartWindow = (props) => {
             .then(response => {
                 setAuthorized(true)
                 setData(response.data.cart)
+                props.setCart(data.map((item)=>{
+                    return item.id
+                }))
+                console.log("CART IN CARTWINDOW" + data.map((item)=>{
+                    return item.id
+                }))
+                props.updateCartCounter(response.data.cart.length)
                 userApi.getBonusBalance(local.get("userid"), local.get("token"))
                     .then((response) => {
                         setBonusBalance(response.data)
@@ -42,7 +49,13 @@ const CartWindow = (props) => {
             .catch(error => {
                 setAuthorized(false)
                 console.log(error)
-                local.save("cartcount", local.get("cart").split(",").length)
+                if(local.get("cart")!==""){
+                    props.updateCartCounter(local.get("cart").split(",").length)
+                    local.save("cartcount", local.get("cart").split(",").length)
+                }else{
+                    props.updateCartCounter(0);
+                    local.save("cartcount", 0)
+                }
                 shopPageApi.getAllByProductsIds({
                     ids: local.get("cart")
                 })
@@ -98,13 +111,13 @@ const CartWindow = (props) => {
                         <>
                         </>
                         :
-                        <p style={{fontSize: "35px"}}><ShoppingCartOutlined style={{color: "darkgray"}}/> Корзина пуста</p>
+                        <p style={{fontSize: "35px"}}><ShoppingCartOutlined style={{color: "darkgray"}}/>Корзина пуста</p>
                 }
                 {
                     data.length > 0
                         ?
                         <>
-                            {authorized ? <MakeOrderButton callBackFromDeleteClick={callBackFromDeleteClick} bonusBalance={bonusBalance} buyBonuses={buyBonuses} cost={cost}
+                            {authorized ? <MakeOrderButton data={data} callBackFromDeleteClick={callBackFromDeleteClick} bonusBalance={bonusBalance} buyBonuses={buyBonuses} cost={cost}
                                                            navigate={navigate}/> : <></>}
                             <Button onClick={() => {
                                 cartApi.clearCart(local.get("userid"), local.get("token")).catch(error => console.log(error))

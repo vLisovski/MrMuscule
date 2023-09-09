@@ -6,18 +6,21 @@ import UsersApiWorker from "../../../api/user/UsersApiWorker";
 import LocalStorageWorker from "../../../storage/LocalStorageWorker";
 import {useNavigate} from "react-router-dom";
 
-const BonusesPage = () => {
+const BonusesPage = (props) => {
 
     let userApi = new UsersApiWorker()
     let local = new LocalStorageWorker()
     let navigate = useNavigate()
 
-
     let [balance, setBalance] = useState(0)
 
     useEffect(()=>{
+        props.setCurrentLeft("bonuses")
         userApi.getBonusBalance(local.get("userid"),local.get("token"))
-            .then(response => setBalance(response.data))
+            .then(response => {
+                local.save("location",window.location.href)
+                setBalance(response.data)
+            })
             .catch(error => {
                 local.save("location",window.location.href)
                 navigate("/authorization")

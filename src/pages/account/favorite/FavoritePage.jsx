@@ -8,7 +8,7 @@ import Meta from "antd/es/card/Meta";
 import Card from "antd/es/card/Card";
 import {useNavigate} from "react-router-dom";
 
-const FavoritePage = () => {
+const FavoritePage = (props) => {
 
     let userApi = new UsersApiWorker()
     let local = new LocalStorageWorker()
@@ -21,11 +21,14 @@ const FavoritePage = () => {
     let [cart, setCart] = useState(local.get("cart"))
     let [favorite, setFavorite] = useState([,])
     let navigate = useNavigate()
+
     useEffect(() => {
 
+        props.setCurrentLeft("favorite")
         userApi.getTotalFavorites(local.get("userid"), local.get("token"))
             .then(response => {
-                setTotal(response)
+                local.save("location",window.location.href)
+                setTotal(response.data)
             })
             .catch(error => {
                 console.log(error)

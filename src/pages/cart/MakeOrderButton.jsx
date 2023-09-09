@@ -4,6 +4,7 @@ import React from 'react';
 import CartApi from "../../api/cart/CartApi";
 import LocalStorageWorker from "../../storage/LocalStorageWorker";
 import OrderApi from "../../api/order/OrderApi";
+import TextArea from "antd/lib/input/TextArea";
 
 const MakeOrderButton = (props) => {
 
@@ -12,7 +13,6 @@ const MakeOrderButton = (props) => {
     let [validInputBonuses, setValidInputBonuses] = useState(true);
     let [validInputDescription, setValidInputDescription] = useState(true);
     let [disabled, setDisabled] = useState(false)
-    let [order, setOrder] = useState()
     let [description, setDescription] = useState()
     const cartApi = new CartApi()
     const orderApi = new OrderApi()
@@ -33,18 +33,17 @@ const MakeOrderButton = (props) => {
                 open={modalIsOpen}
                 okButtonProps={{disabled: disabled}}
                 onOk={() => {
-
-                    setOrder({
+                    orderApi.makeOrderByUserId(local.get("token"), {
                         cost: props.cost,
                         description: description,
                         bonusesToBuy: inputBonuses,
                         bonusBalance: props.bonusBalance,
                         userId: local.get("userid"),
                         status: "collecting",
-                        productIdsList: [...local.get("cart").split(",")]
+                        productIdsList: [...props.data.map((item)=>{
+                            return item.id
+                        })]
                     })
-
-                    orderApi.makeOrderByUserId(local.get("token"), order)
                         .then(() => {
                             cartApi.clearCart(local.get("userid"), local.get("token"))
                                 .then((response) => {
@@ -88,7 +87,10 @@ const MakeOrderButton = (props) => {
                         <small style={{color: "red"}}>Превышено допустимое значение для списания</small>
                     </Col>
                 }
-                <Input autoSize defaultValue={""} status={validInputDescription} onChange={event => {
+                <TextArea autoSize={{
+                    minRows: 2,
+                    maxRows: 6,
+                }} defaultValue={""} status={validInputDescription} onChange={event => {
                     if (event.target.value.length > 512) {
                         setValidInputDescription(false)
                         setDisabled(true)
@@ -97,7 +99,7 @@ const MakeOrderButton = (props) => {
                         setValidInputDescription(true)
                         setDisabled(false)
                     }
-                }} placeholder="Введите сумму"/>
+                }} placeholder="Введите описание"/>
                 {validInputDescription
                     ?
                     <small/>
