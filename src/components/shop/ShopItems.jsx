@@ -4,17 +4,16 @@ import {ShoppingCartOutlined, StarOutlined} from "@ant-design/icons";
 import LocalStorageWorker from "../../storage/LocalStorageWorker";
 import UsersApiWorker from "../../api/user/UsersApiWorker";
 import CartApi from "../../api/cart/CartApi";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 
 const ShopItems = (props) => {
 
     let localStorageWorker = new LocalStorageWorker();
     let loading = props.loading
-    let [actions, setActions] = useState()
 
     const pushAction = (item) => {
         let actions
-        if (localStorageWorker.get("token") != null && props.favorite.length > 0) {
+        if (props.auth) {
             if (props.favorite.includes(item.id)) {
                 if (props.cart.includes(item.id)) {
                     actions = [<>Товар в корзине</>, <StarOutlined style={{color: "yellow"}} onClick={() => {
@@ -49,20 +48,20 @@ const ShopItems = (props) => {
                         addToFavorite(props, item.id)
                     }} key="favorite"/>]
                 }
-
             } else {
                 if(props.favorite[0]==null){
                     actions = [<ShoppingCartOutlined onClick={() => {
 
-                        let cart = localStorageWorker.get("cart").split(",")
+                        let cart = [...props.cart]
 
-                        if (cart[0] === '') {
+                        if (cart.length===0) {
                             cart[0] = item.id
                         } else {
                             cart.push(item.id)
                         }
-                        localStorageWorker.save("cart", cart)
+
                         props.setCart(cart)
+
                     }} key="cart"/>]
                 }else{
                     actions = [<ShoppingCartOutlined onClick={() => {

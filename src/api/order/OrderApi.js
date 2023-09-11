@@ -1,5 +1,4 @@
 import axios from "axios";
-import ShopPageApi from "../shop/ShopPageApi";
 
 class OrderApi {
 
@@ -7,7 +6,8 @@ class OrderApi {
 
     constructor() {
         this.#axios = axios.create({
-            baseURL: "http://localhost:8080/order"
+            //baseURL: "http://localhost:8080/order/"
+            baseURL: "http://localhost/api/order"
         })
     }
 

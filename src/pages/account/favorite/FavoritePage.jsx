@@ -20,6 +20,7 @@ const FavoritePage = (props) => {
     let [currentPage, setCurrentPage] = useState(1)
     let [cart, setCart] = useState(local.get("cart"))
     let [favorite, setFavorite] = useState([,])
+    let [auth,setAuth] = useState(false)
     let navigate = useNavigate()
 
     useEffect(() => {
@@ -28,6 +29,7 @@ const FavoritePage = (props) => {
         userApi.getTotalFavorites(local.get("userid"), local.get("token"))
             .then(response => {
                 local.save("location",window.location.href)
+                setAuth(true)
                 setTotal(response.data)
             })
             .catch(error => {
@@ -84,6 +86,7 @@ const FavoritePage = (props) => {
                     <ShopItems cart={cart}
                                loading={loading}
                                favorite={favorite}
+                               auth={auth}
                                setCart={setCart}
                                setFavorite={setFavorite}
                                cards={cards}/>

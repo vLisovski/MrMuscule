@@ -5,7 +5,8 @@ class AuthOrRegister{
 
     constructor() {
         this.#axios = axios.create({
-            baseURL: "http://localhost:8080/free/auth"
+            //baseURL: "http://localhost:8080/free/auth"
+            baseURL: "http://localhost/api/free/auth"
         })
     }
 

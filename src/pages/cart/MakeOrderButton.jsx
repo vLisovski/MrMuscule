@@ -38,6 +38,7 @@ const MakeOrderButton = (props) => {
                         description: description,
                         bonusesToBuy: inputBonuses,
                         bonusBalance: props.bonusBalance,
+                        bonusBoost: props.bonusBoost,
                         userId: local.get("userid"),
                         status: "collecting",
                         productIdsList: [...props.data.map((item)=>{

@@ -40,6 +40,12 @@ function App() {
         if(local.get("cart")==null){
             local.save("cart",[])
         }
+        if(local.get("password")==null){
+            local.save("password"," ")
+        }
+        if(local.get("email")==null){
+            local.save("email"," ")
+        }
         setCartCount(local.get("cart").split(",").length)
     },[])
 

@@ -6,7 +6,8 @@ class CartApi {
 
     constructor() {
         this.#axios = axios.create({
-            baseURL: "http://localhost:8080/cart"
+            //baseURL: "http://localhost:8080/cart"
+            baseURL: "http://localhost/api/cart"
         });
     }
 

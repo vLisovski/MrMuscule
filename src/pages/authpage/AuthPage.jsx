@@ -14,10 +14,10 @@ const AuthPage = (props) => {
     let [remember, setRemember] = useState("false")
     let [validEmail, setValidEmail] = useState(false);
     let validRegexEmail = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    let [email, setEmail] = useState("");
+    let [email, setEmail] = useState("email");
     let [validPassword, setValidPassword] = useState(false);
     let validRegexPassword = /^.{16}$/;
-    let [password, setPassword] = useState("");
+    let [password, setPassword] = useState("password");
     let [rgba, setRgba] = useState("rgba(200, 0, 0, 0.2)")
     let localStorageWorker = new LocalStorageWorker();
     let authOrRegister = new AuthOrRegister();

@@ -22,7 +22,7 @@ const InventoryPage = (props) => {
     let [offset, setOffset] = useState(0)
     let [currentPage, setCurrentPage] = useState(1)
     let [total, setTotal] = useState(0)
-
+    let [auth,setAuth] = useState(false)
     let [favorite, setFavorite] = useState([])
     let navigation = useNavigate()
 
@@ -34,6 +34,7 @@ const InventoryPage = (props) => {
             if (localStorageWorker.get("token") != null && localStorageWorker.get("userid") != null) {
                 userApi.getFavoritesIds(localStorageWorker.get("userid"), response.data, 0, localStorageWorker.get("token"))
                     .then(response => {
+                        setAuth(true)
                         setFavorite(response.data)
                     }).catch(
                     () => {
@@ -168,6 +169,7 @@ const InventoryPage = (props) => {
                                  span={20}>
                                 <ShopItems cart={props.cart}
                                            favorite={favorite}
+                                           auth={auth}
                                            setCart={props.setCart}
                                            setFavorite={setFavorite}
                                            cards={cards}

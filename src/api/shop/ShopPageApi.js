@@ -6,7 +6,8 @@ class ShopPageApi {
 
     constructor() {
         this.#axios = axios.create({
-            baseURL: "http://localhost:8080/free/products"
+            //baseURL: "http://localhost:8080/free/products"
+            baseURL: "http://localhost/api/free/products"
         })
     }
 

@@ -5,7 +5,8 @@ class UsersApiWorker {
 
     constructor() {
         this.#axios = axios.create({
-            baseURL: "http://localhost:8080/user"
+            //baseURL: "http://localhost:8080/user"
+            baseURL: "http://localhost/api/user"
         });
     }
 
